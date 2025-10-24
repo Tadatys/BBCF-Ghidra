@@ -184,14 +184,23 @@ def sorted_dependencies(tps, pred=None):
     
     return res
 
-def field_info(c, escape=lambda x: x):
+def field_info(c, escape=lambda x: x, seen_names=None):
     # returns C-like `type_name field_name`
     # TODO: function pointers?
     nm = c.fieldName and escape(c.fieldName) or ("__%04x" % c.offset)
+    if seen_names is not None:
+        nm0, i = nm, 1
+        while nm in seen_names:
+            nm = nm0 + ("_" if nm0[-1:] != "_" else "") + str(i)
+            i += 1
+        seen_names.add(nm)
+    
     nm = " " + nm
     tp = c.dataType
     while hasattr(tp, "dataType") and tp.dataType != tp and tp.dataType != None:
         if isinstance(tp, data.Array):
+            if nm[0]=="*":
+                nm = "(" + nm + ")" # pointer to array type
             nm += "[" + short_hex(tp.numElements) + "]"
         elif isinstance(tp, data.Pointer):
             nm = "*" + nm
@@ -201,7 +210,11 @@ def field_info(c, escape=lambda x: x):
         nm = nm + ":" + str(tp.bitSize)
         tp = tp.baseDataType
     
-    nm = escape(tp.name) + nm
+    tpnm = escape(tp.name)
+    if not is_bbcf_type(tp) and len(tp.pathName.split("/")) > 2:
+        tpnm += "_placeholder"
+    
+    nm = tpnm + nm
     if isinstance(tp, data.Structure):
         nm = "struct " + nm;
     if isinstance(tp, data.Enum):
@@ -210,6 +223,7 @@ def field_info(c, escape=lambda x: x):
     return nm
 
 def c_escape(name):
+    name = re.sub('<', '_lt', re.sub('>', '_gt', name)) # so that templates don't end up looking like namespaces
     name = re.sub('[^a-zA-Z0-9_]', '_', name)
     if name[:1].isnumeric():
         name = "_"+name
@@ -217,30 +231,56 @@ def c_escape(name):
 
 def write_header_file(tps, filename):
     with open(filename, "w") as fo:
+        fo.write("""typedef unsigned char undefined;
+typedef unsigned char undefined1;
+typedef unsigned short undefined2;
+typedef unsigned int undefined4;
+typedef undefined* pointer;
+
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+typedef unsigned long long ulonglong;
+typedef long long longlong;
+typedef unsigned int dword;
+
+#pragma pack ( push, 1 )
+
+
+""")
         for t in tps:
             if not is_bbcf_type(t):
-                fo.write("/* " + t.pathName + " */\nstruct " + c_escape(t.name) + "{ undefined __0000[" + short_hex(t.length) + "]; };\n\n")
+                fo.write("/* " + t.pathName + " */\nstruct " + c_escape(t.name) + "_placeholder { undefined __0000[" + short_hex(t.length) + "]; };\n\n")
                 continue
             
             if t.description:
                 fo.write("/*" + t.description + "*/\n")
             
             if hasattr(t, "components"):
-                fo.write("struct " + c_escape(t.name) + " {\n")
+                nm = c_escape(t.name)
+                if isinstance(t, data.Union):
+                    fo.write("union " + nm + " {\n")
+                else:
+                    fo.write("struct " + nm + " {\n")
+                seen_names = set()
                 for c in t.components:
-                    fo.write("    " + field_info(c, c_escape) + ";" + (" //" + c.comment if c.comment else "")+ "\n")
-                fo.write("};\n\n")
+                    fo.write("    " + field_info(c, c_escape, seen_names) + ";" + (" //" + c.comment if c.comment else "")+ "\n")
+                fo.write("};\n")
+                fo.write("static_assert(sizeof(" + nm + ") == " + str(t.length) + ");\n\n")
             
             elif hasattr(t, "names"):
                 fo.write("enum " + c_escape(t.name) + " {\n")
-                for n, v in zip(t.names, t.values):
-                    if n == "_" + str(int(v)): # skip default names?
+                for n in t.names:
+                    v = int(t.getValue(n))
+                    if n == "_" + str(v): # skip default names?
                         continue
-                    fo.write("    " + c_escape(n) + " = " + short_hex(int(v)) + ",\n")
+                    fo.write("    " + c_escape(n) + " = " + short_hex(v) + ",\n")
                 fo.write("};\n\n")
             
             else:
                 print "skipped", t.pathName
+        
+        fo.write("\n#pragma pack ( pop )\n")
 
 def diff_types(a, b, check_field_type=True):
     # prting offsets where the two types have different fields
@@ -486,7 +526,7 @@ def set_ns_method_types(tp=None, ns=None):
 # infer function parameter types from decompile (param_1 only)
 def infer_call_param_type_from_op(op):
     if op.opcode != op.CALL or len(op.inputs) <= 1:
-        return
+        return "no call"
     func = getFunctionAt(toAddr(op.inputs[0].offset))
     tp = op.inputs[1].high.dataType
     btp = base_type(tp)
@@ -495,7 +535,7 @@ def infer_call_param_type_from_op(op):
         tp = df.inputs[0].high.dataType
         btp = base_type(tp)
     if not hasattr(btp, "components") or not is_bbcf_type(btp):
-        return
+        return "bad type?", btp.pathName
     print " " if func.parameters[0].dataType != tp else "=", func, func.parameters[0].dataType, tp
     if func.parameters[0].dataType != tp:
         set_method_type(func, tp, None, base_ptr=False)
@@ -592,6 +632,9 @@ def infer_vftable_call(op):
         for s in ss:
             d = getDataAt(s.address)
             f = getFunctionAt(toAddr(d.getInt(offset*4)))
+            if not f:
+                print "bad vftable", s.address, hex(int(offset*4)), toAddr(d.getInt(offset*4))
+                continue
             if f not in seen:
                 fs.append(f)
                 seen.add(f)
@@ -648,6 +691,8 @@ def tp_offset_info(tp, off):
     return r
 
 def addr_info(a):
+    if a.offset == 0:
+        return "null"
     s = getSymbolAt(a) or getSymbolBefore(a)
     f = getFunctionContaining(a)
     d = getDataContaining(a)
@@ -663,7 +708,7 @@ def addr_info(a):
             r = "in " + r
     elif s:
         r = "::".join(s.path)
-        off = int(a.offset - d.address.offset)
+        off = int(a.offset - s.address.offset)
         if off > 0:
             r += "+"+short_hex(off)
             off = 0
@@ -692,6 +737,24 @@ def format_doc_file(filename):
     
     with open(filename, "w") as f:
         f.write(doc)
+
+def field_offset(tp, path):
+    if type(path) == str:
+        path = path.split(".")
+    tp0 = tp
+    offsets = []
+    for i, nm in enumerate(path):
+        tp1 = None
+        for c in tp.components:
+            if c.fieldName == nm:
+                tp1 = c.dataType
+                offsets.append(c.offset)
+        if tp1:
+            tp = tp1
+        else:
+            print "path_offset", i, tp.name, "has no", nm
+            break
+    return " + ".join(hex(int(o)) for o in offsets)
 
 
 if False:

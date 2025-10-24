@@ -1,10 +1,10 @@
--- lua scripts for cheat enging
+-- lua scripts for cheat engine
 
 -- log stack trace
 function print_stack_trace()
     local base = getAddress("BBCF.exe")
     local ln = (string.format("%08x ", EIP - base))
-    local bp = EBP
+    local bp = EBP -- TODO: some functions don't do mov ebp,esp!
     for i = 1, 10 do
         local ip = readInteger(bp+4)
         ln = ln .. (string.format("%08x ", ip - base))
@@ -18,6 +18,14 @@ function print_stack_trace()
     print (string.format("ESI %08x  EDI %08x  EBP %08x  ESP %08x", ESI, EDI, EBP, ESP))
     print ()
 end
+
+[[
+BBCF.exe+9678F (get_button_hit) breakpoint condition:
+if EAX > 0 then
+    print ("key", readInteger(EBP+12))
+    print_stack_trace()
+end
+]]
 
 
 -- log vftables in task list
@@ -36,25 +44,58 @@ end
 -- change scene?
 function change_scene(mode, scene)
     local base = getAddress("BBCF.exe")
-    local scene = readInteger(base + 0x008903b0 + 0x2604)
-    writeInteger(base + 0x008903b0 + 0x108, mode) -- set GameMode
+    local scene_ptr = readInteger(base + 0x008903b0 + 0x2604)
+    --writeInteger(base + 0x008903b0 + 0x108, mode) -- set GameMode
     writeInteger(base + 0x008903b0 + 0x110, scene) -- set next GameScene
-    writeInteger(scene + 0x2c, 11) -- skip status 10
-    writeInteger(scene + 0x14, 2) -- set node for removal
+    if scene_ptr ~= 0 then
+        --writeInteger(scene_ptr + 0x2c, 11) -- skip status 10
+        writeInteger(scene_ptr + 0x14, 2) -- set node for removal
+    end
 end
 
 --[[ modes:
-6, 6 -- char select
-6, 14 -- vs info
-6, 15 -- battle
-11, 15 -- replay theater battle
-11, 26 -- replay theater list
-13, 0x18 -- story select
-13, 0x1B -- main menu
-13, 0x1D -- library
+
+change_scene(6, 6) -- char select
+change_scene(6, 14) -- vs info
+change_scene(6, 15) -- battle
+change_scene(11, 15) -- replay theater battle
+change_scene(11, 26) -- replay theater list
+change_scene(13, 24) -- story select
+change_scene(13, 27) -- main menu
+change_scene(13, 29) -- library
+change_scene(12, 3) -- intro
+change_scene(12, 4) -- title screen
+change_scene(5, 16) -- end of battle?
+
+
 
 intro -> replay theater segfaults, but title -> replay theater seems ok. but then segfaults on replay start?
 ]]
+
+
+local start_loaded_replay_asm = [[
+alloc(newmem, 2048)
+createthread(newmem)
+
+newmem:
+  mov ecx, %x
+  mov [ecx], 1
+  mov ecx, %x
+  call %x
+  ret
+]]
+
+function start_loaded_replay()
+    local base = getAddress("BBCF.exe")
+    local scene_ptr = readInteger(base + 0x008903b0 + 0x2604)
+    local menu_state = base + 0x01304b90
+    local set_next_scene = base + 0x002c2960
+    local asm = string.format(start_loaded_replay_asm, menu_state, scene_ptr, set_next_scene)
+    print (asm)
+    autoAssemble(asm)
+end
+
+
 
 -- export labels for ghidra
 function export_labels()

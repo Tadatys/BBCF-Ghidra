@@ -36,6 +36,7 @@ diff_types(*getDataTypes("SCENE_CBase"))
 
 * `00150f30 CSceneController::update_task` creates a SCENE task based on `008904c0 static_GameVals.NextGameScene`, but only if there is no existing scene task (with priority 0x8000001).
   * `00150cf0 CSceneController::add_task_for_GameScene` maps GameScene enum to SCENE factories.
+  * Alternatively, if `00892908 static_GameVals._next_scene_alt` is set, scenes are created starting from `001508ef in CSceneController::_update_1`, with scene-speciffic logic.
 * `0014f9b0 SCENE_CBase::update_task` calls virtual methods depending on GameSceneState (+0x2c), each method increases it by 1. States 0-8 are initialization. State 9 is the normal running state. State 10 chooses NextGameScene and sets `task.state=2` to remove it. States 4-6 and 11 often do nothing. State 11 doesn't seem to run at all?
 
 SCENE vftable holds state methods in a weird order:
@@ -68,7 +69,7 @@ SCENE vftable holds state methods in a weird order:
 
 * `00167d30 SCENE_CBattle::_init_8_1` > `0015dd30 BATTLE_CObjectManager::_build_src_hash_table` reads the scr pacs from these indices and puts their data into `00db6b28 static_BATTLE_CObjectManager.src_hash_tables`
 
-* `0016b1f0 SCENE_CBattle::run_1_frame` > `00158cf0 BATTLE_CObjectManager::update_entities` > `001746d0 OBJ_CBase::FUN_001746d0` (vftable[5]) > `00181b50 OBJ_CBase::maybe_BBscript_frame_loop` (vftable[7]) > `0018b54d in OBJ_CBase::_bbscript_run_next_line?` reads the hash table for next action and stores the pointer in OBJ_CBase.nextScriptLineLocationInMemory (+0x1320).
+* `0016b1f0 SCENE_CBattle::run_1_frame` > `00158cf0 BATTLE_CObjectManager::update_entities` > `001746d0 OBJ_CBase::_update_5` (vftable[5]) > `00181b50 OBJ_CBase::maybe_BBscript_frame_loop` (vftable[7]) > `0018b54d in OBJ_CBase::_bbscript_run_next_line?` reads the hash table for next action and stores the pointer in OBJ_CBase.nextScriptLineLocationInMemory (+0x1320).
   * ... > `00182bb0 OBJ_CBase::BBScriptFuncExecute` runs the scr commands, each of which corresponds to a method in OBJ_CBase::vftable, e.g. `00197010 OBJ_CBase::_bbcmd_22007_setInvincible`.
 
 
@@ -78,11 +79,11 @@ SCENE vftable holds state methods in a weird order:
   * `00096990 GAME_KeyControler::_create_CKeyRingBuffer` connects the task to the CInput.
 
 * `000829c0 GAME_InputTask::update_task` > `000096c0 CInputList::_update_all` calls CInput.vftable[2] for each created CInput
-  * `000194b0 AASTEAM_CInputKeyBoard::FUN_000194b0` (vftable[2]) calls GetKeyboardState(). BBIM hook DenyKeyboardInputFromGame gets injected here.
+  * `000194b0 AASTEAM_CInputKeyBoard::FUN_000194b0_vf[7]` (vftable[2]) calls GetKeyboardState(). BBIM hook DenyKeyboardInputFromGame gets injected here.
   * `0001a5c0 AASTEAM_CInputXInputPad::FUN_0001a5c0` (vftable[2]) calls XInputGetState().
-  * `00019bf0 AASTEAM_CInputPad::FUN_00019bf0` (vftable[2]) probalby calls DirectInput8 methods.
+  * `00019bf0 AASTEAM_CInputPad::FUN_00019bf0_vf[8]_vf[2]` (vftable[2]) probalby calls DirectInput8 methods.
 
-* `00096600 GAMESTEAM_BattleKeyControler::update_task` > ... > `000963f0 GAMESTEAM_BattleKeyControler::FUN_000963f0` > GAMESTEAM_BattleKeyControler::vftable[2] calls CInput::vftable[3], which probably reads that input.
+* `00096600 GAMESTEAM_BattleKeyControler::update_task` > ... > `000963f0 GAMESTEAM_BattleKeyControler::FUN_000963f0_vf[2]` > GAMESTEAM_BattleKeyControler::vftable[2] calls CInput::vftable[3], which probably reads that input.
 
 * `0016b1f0 SCENE_CBattle::run_1_frame` > `00159fe0 BATTLE_CObjectManager::update_inputs` reads live inputs and writes them to `00e1986c static_BATTLE_CObjectManager.current_inputs`.
   * `0007e5c0 _get_GAME_BattleSynthKeyControler_for_player` returns `0065c678 _static_GAME_BattleSynthKeyControler` or `0065c684 _static_GAME_BattleSynthKeyControler_1`, depending on `008929a4 static_GameVals.synth_controller_index_for_player` (which is 0,1, or 1,0). The returned object holds this index.
@@ -92,8 +93,10 @@ SCENE vftable holds state methods in a weird order:
   * Many other functions here call `002cc0f0 get_menu_item_values` and generate inputs based on training settings and other logic.
   * `001ca700 OBJ_CCharBase::update_input_buffer_fields` then updates CCharBase input buffer fields based on this input.
 
+* `0016b1f0 SCENE_CBattle::run_1_frame` > `00158e01 in BATTLE_CObjectManager::update_entities` > `00174701 in OBJ_CBase::_update_5` (vftable[5]) > `0017470b in OBJ_CBase::_update_5` (vftable[9]) calls many functions, including `001b7170 OBJ_CCharBase::_check_to_entrer_CmnActStand2Crouch` which calls `001ca1e0 OBJ_CCharBase::_check_input_buffer?` (vftable[0x4a1]) to check these input buffer fields (here, for the down direction) and `0018cfa0 OBJ_CBase::_bbcmd_21_enterState` (vftable[0x2c]) to enter the state name stored in `00e3dad0 DAT_00e3dad0` ("CmnActStand2Crouch").
 
-* Many UI functions call `000967e0 GAME_SynthKeyControler::_check_button_down_1?` and `00096720 GAME_SynthKeyControler::_check_button_hit_1`, which likewise get the key controllers and check their input fields. `005de0b0 DAT_005de0b0_key_masks` is a static array that maps key number (param_2) to bit masks.
+* Many UI functions call `000967e0 GAME_SynthKeyControler::_check_button_down_1` and `00096720 GAME_SynthKeyControler::_check_button_hit_1`, which likewise get the key controllers and check their input fields. `005de0b0 DAT_005de0b0_key_masks` is a static array that maps key number (param_2) to bit masks. Key 3 is confirm, 4 is back, 7 is up, 8 is down, 9 is left, 10 is right.
+  * It's useful to set a breakpoint at the end of `00096720 GAME_SynthKeyControler::_check_button_hit_1`, with condition `EAX>0`, to see what function handles logic for the current menu.
 
 
 # Match logic
@@ -102,7 +105,7 @@ SCENE vftable holds state methods in a weird order:
   * Note that the value used to read or write inputs for current playback is `011c034c static_CBattleReplayDataManager.playback_round`, not MatchInfo.round.
 * `0016b525 in SCENE_CBattle::run_1_frame` or ... > `000e6130 SCENE_CBattle::run_1_frame_online_1?` call `00161720 MatchInfo::_update` which runs a lot of logic on this data.
   * Many functions here call `0015d9c0 BATTLE_CObjectManager::_request_event` which writes an action id to the end of `00db6aec static_BATTLE_CObjectManager.events` array.
-  * `0015bc90 BATTLE_CObjectManager::process_events` reads this array and takes actions like restarting the round.
+  * `0015bc90 BATTLE_CObjectManager::process_events` reads this array and takes actions like restarting the round. Events also control the `00db6b10 static_BATTLE_CObjectManager.controls_enabled?` flag which is cleared to disable inputs when playing character intro/outro animations.
 
 
 # Replays
@@ -113,10 +116,10 @@ SCENE vftable holds state methods in a weird order:
 
 * `008f85d8 static_CSaveDataManager` stores bbsave, static bbsave_buffer, bbstory_buffer, the replay_list, and also flags for SaveUtil.
 
-* e.g. `002c3320 SCENE_CReplayTheater::update_scene` > `002c2ab0 _replay_list_update_menu` calls unpack_replay() before transitioning to another scene. Also calls `002c3f20 DAT_01304bf8::_set_save_flag_4_replay_list`, which sets `01304c40 DAT_01304bf8.saveutil_flags`|4 bit, indicating that replay_list needs to be saved.
+* e.g. `002c3320 SCENE_CReplayTheater::update_scene` > `002c2ab0 SCENE_CReplayTheater::_update_menu` calls unpack_replay() before transitioning to another scene. Also calls `002c3f20 AutoSaveStruct::_set_save_flag_4_replay_list`, which sets `01304c40 _static_AutoSaveStruct.saveutil_flags`|4 bit, indicating that replay_list needs to be saved.
 
-* `0034cca0 GAME_CEventControlTask::update_task` > ... > `002c4990 DAT_01304bf8::_update` > `002c6e50 DAT_01304bf8::_update_save_util` checks these flags
-  * e.g. at `002c6f9c in DAT_01304bf8::_update_save_util` it calls `000bb460 CSaveDataManager::_set_next_SaveUtil_action_0_write`, which sets CSaveDataManager.next_SaveUtil_action and other fields. `01304bf8 DAT_01304bf8` then waits for the write to finish, and if CSaveDataManager.save_status != 0 it moves to `002c6fc8 in DAT_01304bf8::_update_save_util`, which probably displays the "failed to save replay data" message.
+* `0034cca0 GAME_CEventControlTask::update_task` > ... > `002c4990 AutoSaveStruct::_update` > `002c6e50 AutoSaveStruct::_update_save_util` checks these flags
+  * e.g. at `002c6f9c in AutoSaveStruct::_update_save_util` it calls `000bb460 CSaveDataManager::_set_next_SaveUtil_action_0_write`, which sets CSaveDataManager.next_SaveUtil_action and other fields. `01304bf8 _static_AutoSaveStruct` then waits for the write to finish, and if CSaveDataManager.save_status != 0 it moves to `002c6fc8 in AutoSaveStruct::_update_save_util`, which probably displays the "failed to save replay data" message.
 
 * `000b9f70 GAME_CSaveTask::update_task` > `000caca0 SaveUtil::start_file_action` checks CSaveDataManager.next_SaveUtil_action, selects buffers, then creates a thread.
   * `000cb690 SaveUtil::thread_action` runs WriteFile(), ReadFile() and other IO operations, then terminates. It also sets CSaveDataManager.save_status. There is at most one thread at any time.
@@ -125,19 +128,33 @@ SCENE vftable holds state methods in a weird order:
 # Network
 
 * `008f7958 static_NetworkStruct` is updated by `000a73d0 GAME_CNetworkTask::update_task`.
+* Other key objects are `00662730 static_GAMESTEAM_CNetworkServer`, `00625788 static_AASTEAM_CNetworker`, `008ad0c0 static_NetUserData`
+
+* `00082c66 in entry_2` > `SteamInternal_ContextInit` > `00007e60 _steam_init` > `00007a70 _get_steam_interfaces` initializes Steam interfaces.
+  * Almost every Steam API call is directly preceded by `SteamInternal_ContextInit`, which returns `005d3218 static_SteamInterfaces`, where the interface pointers are stored.
+
+* Many network actions run `000a88d0 NetworkStruct::_push_action`, which later gets read in `000a6f70 NetworkStruct::_update`
+  * "Network mode" in main menu, at `0031a735 in MainMenu::run_selected_menu_item`, pushes action 5, popped at `000a7014 in NetworkStruct::_update`. Eventually user data is read by `000a73fe in GAME_CNetworkTask::update_task` > `0001d410 AASTEAM_CNetworker::_update` (vftable[5]) > ... > `00028ac0 uei::ThinkLogicStrategyDownloadTUS::FUN_00028ac0` into `008ad0c0 static_NetUserData`.
+  * Selecting a lobby to join pushes action 1, popped at `000aca19 in NetworkStruct::_update_player_menu?`. Eventually `000a8aa1 in NetworkStruct::_start_join_lobby` calls `0006dfa0 GAMESTEAM_CNetworkServer::_JoinLobby?`.
+  * Doing a ranked search, at `00319409 in FUN_00319210_vf[3]`, pushes action 0x15, popped at `000ae7c4 in NetworkStruct::_update_ranked_menu?`, where eventually `000a45c2 in _start_ranked_lobby_search()` calls `0006f940 GAMESTEAM_CNetworkServer::lobby_search` (vftable[3]).
+  * Refreshing player room list pushes action 0x1b, popped at `000aca19 in NetworkStruct::_update_player_menu?`, where eventually `000a96b8 in NetworkStruct::_start_player_lobby_search` calls `0006f940 GAMESTEAM_CNetworkServer::lobby_search` (vftable[3]). The search results are then processed in `000a55e0 GAMESTEAM_CNetworkServer::_call_read_lobby_search_results` > (vftable[17]) > `0006fcc0 GAMESTEAM_SearchResultNode::_GetLobbyData`.
+  * Sending a chat message pushes action 0x31.
+  * In ranked menu, "Entry" and "Withdraw Entry" both push action 0x14, popped at `000ae7c4 in NetworkStruct::_update_ranked_menu?`, and act depending on `008f7758 DAT_008f7758_entry?`. In trainin menu "Ranked Match Entry Menu" pushes 0xe, popped at `000b027b in NetworkStruct::_update_default?`.
 
 * `00625798 static_AASTEAM_CNetworker.base._0x10` holds chat messages.
+  * New messages are prepended at `0009b240 in NetforkStruct::_handle_packets?` > `0006ec85 in GAMESTEAM_CNetworkServer::FUN_0006ec00`.
 
 
 # Menus
 
-* `00e8c044 static_MainMenu` is initialized by `002405a0 GAME_CETCManager::static_init` > `00308b10 MainMenu::ctor`, which runs at startup from `0044a660 static_initializer_table`
+* `00e8c044 static_MainMenu` is initialized by `002405a0 GAME_CETCManager::static_init` > `00308b10 MainMenu::ctor`, which runs at startup from `0044a660 _static_initializer_table`
 * `00ef1ed0 static_GAME_CETCManager` holds a reference to main menu and the other objects initialized along with it.
 
 * `0032aa9a in SCENE_CMainMenuEX::update_scene` calls `0030c120 MainMenu::update` 
-  * `0031a5a0 MainMenu::run_selected_menu_item` is what gets called when you press enter
+  * `0031a5a0 MainMenu::run_selected_menu_item` is what gets called when you press confirm.
 
 * `008f85e0 static_CSaveDataManager.bbsave` stores many settings values, including training mode settings. The whole structure gets written to bbsave.dat by SaveUtil.
   * `002cc0f0 get_menu_item_values` and `002cd700 set_menu_item_values` read and write them
   * `013ae3a8 _menu_item_configs_013ae3a8` holds configs for menu items, including name and bbsave_index, where the value of this item is stored
 
+* `011003c0 _static_MenuMessage_0` holds state for error or confirmation popups. `0034cca0 GAME_CEventControlTask::update_task` > ... > `002926e0 _handle_msg_input` updates it, but there is no callback on confirm, instead the code that created the popup is constantly checking its state.

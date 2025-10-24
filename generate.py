@@ -212,6 +212,7 @@ def minify_func(f):
     for l, r in vars: # shorten local vars. # TODO make sure not to remove fields: .param, ->param
         code = re.sub(l, r, code)
     
+    # TODO: re.sub(r"\(*([a-zA-Z0-9_]+\+(0x[0-9a-fA-F]|[0-9]))\)\(", r"(\1.vf[\2])(" code) # divide the offset by 4 and turn to decimat, to make virtual calls easier to find
     code = re.sub("{","(", re.sub("}", ")", code)) # {}s in names would make parsing harder
     return "_eval_" + code
 
@@ -310,11 +311,13 @@ for ns, (sz, ctor, i0, i1) in sorted(class_sizes.items(), key=lambda p: p[0].nam
         
         if tp.name.startswith("SCENE_"):
             if tp.components[0].dataType == data.Undefined.DEFAULT:
-                tp.replaceAtOffset(0, find_tp_ns("SCENE_CBase")[0], 1, "base", "")
+                tp0 = find_tp_ns("SCENE_CBase")[0]
+                tp.replaceAtOffset(0, tp0, tp0.length, "base", "")
         
         if tp.name.endswith("Task"):
             if tp.components[0].dataType == data.Undefined.DEFAULT:
-                tp.replaceAtOffset(0, find_tp_ns("AA_TaskNode")[0], 1, "base", "")
+                tp0 = find_tp_ns("AA_TaskNode")[0]
+                tp.replaceAtOffset(0, tp0, tp0.length, "base", "")
 
 
 # find PTR_vftable, which are likely static objects - there are only a few 
@@ -491,6 +494,26 @@ for i in vcalls:
     vcfs[getFunctionContaining(i.address)].append(i)
 
 print len(vcalls), len(vcfs), sum(1 for f in vcfs if f and f.symbol.parentNamespace.name != "Global")
+
+# list the virtual functions being called at the end of FUN_ names, to make them visible in call tree
+for f, vfs in vcfs.items():
+    if f and f.name.startswith("FUN_"): # or _eval_ ?
+        i = f.name.find("_vf")
+        nm = f.name if i == -1 else f.name[:i]
+        seen = set()
+        for c in vfs:
+            off = 0
+            if len(c.getOpObjects(0)) > 1:
+                off = int(getattr(c.getOpObjects(0)[1], "bigInteger", 0))/4
+            if off not in seen:
+                if len(seen) >= 10:
+                    nm += "..."
+                    break
+                nm += "_vf["+str(off)+"]"
+                seen.add(off)
+        print nm
+        f.setName(nm, symbol.SourceType.IMPORTED)
+
 
 
 

@@ -1,3 +1,19 @@
+typedef unsigned char undefined;
+typedef unsigned char undefined1;
+typedef unsigned short undefined2;
+typedef unsigned int undefined4;
+typedef undefined* pointer;
+
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+typedef unsigned long long ulonglong;
+typedef long long longlong;
+typedef unsigned int dword;
+
+#pragma pack ( push, 1 )
+
+
 struct AA_CNetworker {
     undefined** vftable;
     undefined4 __0004[3];
@@ -8,6 +24,7 @@ struct AA_CNetworker {
     undefined __00a8[0x1d][0x94];
     undefined __116c[0x2c];
 };
+static_assert(sizeof(AA_CNetworker) == 4504);
 
 struct GGPOSessionCallbacks {
     undefined* begin_game;
@@ -18,6 +35,7 @@ struct GGPOSessionCallbacks {
     undefined* advance_frame;
     undefined* on_event;
 };
+static_assert(sizeof(GGPOSessionCallbacks) == 28);
 
 struct Sync__SavedFrame {
     byte* buf;
@@ -25,11 +43,13 @@ struct Sync__SavedFrame {
     int frame;
     int checksum;
 };
+static_assert(sizeof(Sync__SavedFrame) == 16);
 
 struct Sync__SavedState {
     struct Sync__SavedFrame frames[0xa];
     int head;
 };
+static_assert(sizeof(Sync__SavedState) == 164);
 
 struct Sync__Config {
     struct GGPOSessionCallbacks callbacks;
@@ -37,6 +57,7 @@ struct Sync__Config {
     int maybe_num_players;
     int maybe_input_size;
 };
+static_assert(sizeof(Sync__Config) == 40);
 
 /*prob need to look at Sync::SavedStated again to fix the offset hardcoded*/
 struct Sync_ {
@@ -52,6 +73,7 @@ struct Sync_ {
     undefined __0100[0x40c];
     struct UdpMsg__connect_status* _local_connect_status;
 };
+static_assert(sizeof(Sync_) == 1296);
 
 /*PlaceHolder Class Structure*/
 struct AA_LooseList {
@@ -59,30 +81,44 @@ struct AA_LooseList {
     struct AA_ListNode* head;
     struct AA_ListNode* tail;
 };
+static_assert(sizeof(AA_LooseList) == 12);
 
 struct AA_TaskList {
     undefined* vftable;
     struct AA_LooseList list;
 };
+static_assert(sizeof(AA_TaskList) == 16);
 
 struct AAWin_CApplication {
     undefined** vftable;
     struct AA_TaskList tasks;
     int frame_count;
     pointer base_adress; //it's base adress in memory
-    struct HWND__* hWnd; //windows handle to bbcf window
+    struct HWND___placeholder* hWnd; //windows handle to bbcf window
     wchar_t title_[0x100]; //"BLAZBLUE CENTRALFICTION"
     undefined __0220[0x144c];
 };
+static_assert(sizeof(AAWin_CApplication) == 5740);
+
+struct ReplayRoundInfo {
+    int frame_count;
+    int winner;
+    int valid_;
+    undefined __000c[0xc];
+    int p_overdrive[2];
+    undefined __0020[0x80];
+};
+static_assert(sizeof(ReplayRoundInfo) == 160);
 
 struct AA_TaskNode {
-    undefined* vftable;
+    undefined** vftable;
     struct AA_ListNode* next;
     struct AA_ListNode* prev;
     int count_;
     int priority;
     int state; //0: normal, 2: remove
 };
+static_assert(sizeof(AA_TaskNode) == 24);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_SystemManager {
@@ -100,12 +136,14 @@ struct AASTEAM_SystemManager {
     undefined4 __0038;
     undefined __003c[0x9c8];
 };
+static_assert(sizeof(AASTEAM_SystemManager) == 2564);
 
 /*PlaceHolder Class Structure*/
 struct GAME_SynthKeyControler {
     undefined** vftable;
     int index;
 };
+static_assert(sizeof(GAME_SynthKeyControler) == 8);
 
 struct SnapshotManager__struct {
     int _framecount;
@@ -123,6 +161,7 @@ struct SnapshotManager__struct {
     undefined* __0040;
     int __0044;
 };
+static_assert(sizeof(SnapshotManager__struct) == 72);
 
 /*IMPORTANT!: There's always a 8 byte offset on the names since it was copied from ReplayList, and ReplayList has an initial 8 bytes padding!!!!*/
 struct ReplayFileHeader {
@@ -149,8 +188,8 @@ struct ReplayFileHeader {
     dword recorder_name[0x12];
     undefined __0280[0x7c];
     undefined4 __02fc;
-    undefined4 __0300;
-    undefined4 __0304;
+    undefined4 replay_version_;
+    undefined4 catalog_version_;
     uint favourite;
     uint p1_lvl;
     uint p2_lvl;
@@ -158,24 +197,90 @@ struct ReplayFileHeader {
     undefined __0318[0x74];
     undefined4 __038c;
 };
+static_assert(sizeof(ReplayFileHeader) == 912);
+
+struct ReplayFileSettings {
+    undefined4 rounds_to_win;
+    undefined4 round_time;
+    undefined4 stage;
+    undefined4 music;
+    undefined4 p1_flags_;
+    undefined4 __0014;
+    undefined4 p1_char_index;
+    undefined4 __001c;
+    undefined4 __0020;
+    undefined4 p1_palette;
+    undefined4 __0028;
+    undefined4 __002c;
+    undefined4 __0030;
+    undefined4 __0034;
+    undefined4 __0038;
+    undefined4 __003c;
+    undefined4 __0040;
+    undefined4 __0044;
+    undefined4 __0048;
+    undefined4 __004c;
+    undefined4 __0050;
+    undefined4 __0054;
+    undefined4 __0058;
+    undefined4 __005c;
+    undefined4 __0060;
+    undefined4 __0064;
+    undefined4 __0068;
+    undefined4 __006c;
+    undefined4 __0070;
+    undefined4 __0074;
+    undefined4 __0078;
+    undefined4 p2_flags_;
+    undefined4 __0080;
+    undefined4 p2_char_index;
+    undefined4 __0088;
+    undefined4 __008c;
+    undefined4 p2_palette;
+    undefined4 __0094;
+    undefined4 __0098;
+    undefined4 __009c;
+    undefined4 __00a0;
+    undefined4 __00a4;
+    undefined4 __00a8;
+    undefined4 __00ac;
+    undefined4 __00b0;
+    undefined4 __00b4;
+    undefined4 __00b8;
+    undefined4 __00bc;
+    undefined4 __00c0;
+    undefined4 __00c4;
+    undefined4 __00c8;
+    undefined4 __00cc;
+    undefined4 __00d0;
+    undefined4 __00d4;
+    undefined4 __00d8;
+    undefined4 __00dc;
+    undefined4 __00e0;
+    undefined4 __00e4;
+    undefined4 __00e8;
+    undefined4 __00ec;
+};
+static_assert(sizeof(ReplayFileSettings) == 240);
 
 struct ReplayFile {
     undefined __0000[4];
     undefined __0004[4];
     struct ReplayFileHeader head;
-    undefined __0398[0xf0];
-    int max_input_buffer_length_[6][0x28];
+    struct ReplayFileSettings settings;
+    struct ReplayRoundInfo round_info[6];
     undefined __0848[0x84];
     undefined inputs[0xf734];
 };
+static_assert(sizeof(ReplayFile) == 65536);
 
 struct CBattleReplayDataManager {
     undefined** vftable;
     undefined** vftable_1;
-    undefined replay[8]; //size 0x54ed0
+    undefined replay[8]; //start of an unpacked replay. size 0x54ed0
     struct ReplayFileHeader replay_header;
-    undefined __03a0[0xf0];
-    int max_input_buffer_length_[6][0x28];
+    struct ReplayFileSettings replay_settings;
+    struct ReplayRoundInfo replay_round_info[6];
     undefined __0850[0x84];
     ushort replay_inputs[0xc][0x3840];
     undefined __54ed4[4];
@@ -190,6 +295,7 @@ struct CBattleReplayDataManager {
     int __64ef4;
     struct ReplayFileHeader finished_replay_header;
 };
+static_assert(sizeof(CBattleReplayDataManager) == 414344);
 
 enum FPACIndex {
     static_obj_pac = 1,
@@ -213,6 +319,7 @@ struct GAME_LoadTarget {
     undefined4 __0118;
     undefined4 __011c;
 };
+static_assert(sizeof(GAME_LoadTarget) == 288);
 
 struct probable_struct {
     uint __0000;
@@ -225,6 +332,7 @@ struct probable_struct {
     int __00c8;
     int _framecount_or_last_confirmed_frame;
 };
+static_assert(sizeof(probable_struct) == 208);
 
 struct BackendStaticStruct {
     pointer _steamp2pbackend_ptr;
@@ -245,21 +353,20 @@ struct BackendStaticStruct {
     undefined __0126;
     undefined __0127;
 };
+static_assert(sizeof(BackendStaticStruct) == 296);
 
 /* /winsock.h/sockaddr_in */
-struct sockaddr_in{ undefined __0000[0x10]; };
+struct sockaddr_in_placeholder { undefined __0000[0x10]; };
 
 struct SteamUdpProtocol__QueueEntry {
     int queue_time;
-    struct sockaddr_in dest_addr;
+    struct sockaddr_in_placeholder dest_addr;
     struct UdpMsg* msg;
 };
+static_assert(sizeof(SteamUdpProtocol__QueueEntry) == 24);
 
 struct SCENE_CBase {
-    struct SCENE_CBase_vftable* vftable;
-    void* next;
-    void* prev;
-    undefined __000c[0xc];
+    struct AA_TaskNode base;
     struct AA_TaskList tasks;
     undefined __0028[4];
     uint GameSceneState;
@@ -267,10 +374,31 @@ struct SCENE_CBase {
     int __0044;
     undefined __0048[0x18];
 };
+static_assert(sizeof(SCENE_CBase) == 96);
+
+struct InputBufferButton {
+    char down;
+    char hit;
+    char release;
+    char hit_5f;
+    char up;
+    char pad_05[4];
+};
+static_assert(sizeof(InputBufferButton) == 9);
+
+struct InputBufferDirection {
+    char down;
+    char similar_down;
+    char pad_02[6];
+    char up;
+    char similar_up;
+    char pad_0A[3];
+};
+static_assert(sizeof(InputBufferDirection) == 13);
 
 /*CharData*/
 struct OBJ_CCharBase {
-    void** OBJ_CCharBase__vftable;
+    void** vftable;
     int frame_count_minus_1;
     int hitstop;
     char pad_000c[4];
@@ -282,7 +410,7 @@ struct OBJ_CCharBase {
     undefined4 __0024;
     undefined4 __0028;
     undefined4 __002c;
-    undefined4 __0030;
+    undefined4 player_index_;
     int charIndex;
     char pad_0038[0x14];
     char* pJonbEntryBegin;
@@ -414,7 +542,9 @@ struct OBJ_CCharBase {
     char currentAction[0x14];
     char pad_2084[0x1c4];
     char char_abbr[4];
-    char pad_224C[0x28];
+    char pad_224C[0x14];
+    int input_direction_;
+    undefined __2264[0x10];
     int blockstun;
     char pad_2278[0x2ef8];
     int hitstun;
@@ -453,9 +583,11 @@ struct OBJ_CCharBase {
     int barrier;
     char pad_5B08[0x287c];
     int SLOT_unknown1;
-    char pad_8388[0x16414];
+    char pad_8388[0x163b0];
+    int _input_counters_[0x19];
     char L_input_buffer_flag_base;
-    char pad_1E79D[0xab];
+    struct InputBufferButton L_input_buttons[6];
+    struct InputBufferDirection L_input_directions[9];
     char buffer_L_236;
     char buffer_L_623;
     char buffer_L_214;
@@ -517,7 +649,8 @@ struct OBJ_CCharBase {
     char buffer_L_236_5f;
     char buffer_L_214_5f;
     char R_input_buffer_flag_base;
-    char pad_1E8A7[0xab];
+    struct InputBufferButton R_input_buttons[6];
+    struct InputBufferDirection R_input_directions[9];
     char buffer_R_236;
     char buffer_R_623;
     char buffer_R_214;
@@ -578,7 +711,7 @@ struct OBJ_CCharBase {
     char padding_1E9AA[4];
     char buffer_R_236_5f;
     char buffer_R_214_5f;
-    char pad_1E9B0[0x10];
+    char _input_related_[0x10];
     int slot2_or_slot4;
     char pad_1E9C4[0x1748];
     int Drive1;
@@ -591,41 +724,48 @@ struct OBJ_CCharBase {
     char pad_20158[0x136c];
     undefined __214c4[0x34b4];
 };
+static_assert(sizeof(OBJ_CCharBase) == 149880);
 
 struct Poll {
     undefined __0000[0x510];
 };
+static_assert(sizeof(Poll) == 1296);
 
 struct Udp {
-    socket* SOCKET;
+    undefined* SOCKET;
     struct GGPOSessionCallbacks* _callbacks;
     struct Poll* _poll;
 };
+static_assert(sizeof(Udp) == 12);
 
 struct SteamUdpProtocol___oo_packet {
     int send_time;
-    struct sockaddr_in dest_addr;
+    struct sockaddr_in_placeholder dest_addr;
     struct UdpMsg* msg;
 };
+static_assert(sizeof(SteamUdpProtocol___oo_packet) == 24);
 
 /* /0Mine/Class/RingBuffer<QueueEntry, 256> */
-struct RingBuffer_QueueEntry__256_{ undefined __0000[0x180c]; };
+struct RingBuffer_ltQueueEntry__256_gt_placeholder { undefined __0000[0x180c]; };
 
 struct SteamUdpProtocol__Union_state_sync {
     uint roundtrips_remaining;
     uint random;
 };
+static_assert(sizeof(SteamUdpProtocol__Union_state_sync) == 8);
 
 struct SteamUdpProtocol__Union_state_running {
     uint last_quality_report_time;
     uint last_network_stats_interval;
     uint last_input_packet_recv_time;
 };
+static_assert(sizeof(SteamUdpProtocol__Union_state_running) == 12);
 
-struct SteamUdpProtocol___state {
+union SteamUdpProtocol___state {
     struct SteamUdpProtocol__Union_state_sync sync;
     struct SteamUdpProtocol__Union_state_running running;
 };
+static_assert(sizeof(SteamUdpProtocol___state) == 12);
 
 /*the bits estimate needs to be checked*/
 struct GameInput_ {
@@ -633,6 +773,7 @@ struct GameInput_ {
     int size;
     char bits[0x12];
 };
+static_assert(sizeof(GameInput_) == 26);
 
 /*must double check GameInput! size, might be 2 bytes short*/
 struct TimeSync_ {
@@ -643,11 +784,12 @@ struct TimeSync_ {
     undefined __0248[0x14];
     int _next_prediction;
 };
+static_assert(sizeof(TimeSync_) == 608);
 
 struct SteamUdpProtocol {
     void** vftable;
     struct Udp* _udp;
-    struct sockaddr_in _peer_addr;
+    struct sockaddr_in_placeholder _peer_addr;
     ushort _magic_number;
     int _queue;
     ushort _remote_magic_number;
@@ -655,7 +797,7 @@ struct SteamUdpProtocol {
     int _send_latency;
     int _oop_percent;
     struct SteamUdpProtocol___oo_packet _oo_packet;
-    struct RingBuffer_QueueEntry__256_ _send_queue;
+    struct RingBuffer_ltQueueEntry__256_gt_placeholder _send_queue;
     undefined* __1850;
     int _packets_sent;
     int _bytes_sent;
@@ -688,6 +830,7 @@ struct SteamUdpProtocol {
     struct TimeSync_ _timesync;
     undefined __3770[0x2010];
 };
+static_assert(sizeof(SteamUdpProtocol) == 22400);
 
 struct SteamSpectatorBackend_ {
     undefined* __0000;
@@ -707,10 +850,12 @@ struct SteamSpectatorBackend_ {
     int _disconnect_notify_start_mine;
     undefined __5ce4[0x1c04];
 };
+static_assert(sizeof(SteamSpectatorBackend_) == 30952);
 
 /*PlaceHolder Class Structure*/
 struct GAME_CETCObjParam {
 };
+static_assert(sizeof(GAME_CETCObjParam) == 1);
 
 /*PlaceHolder Class Structure*/
 struct GAME_CETCManager {
@@ -726,7 +871,7 @@ struct GAME_CETCManager {
     undefined __2740[4];
     struct AA_LooseList* __2744;
     undefined __2748[2][0x18];
-    undefined4 flags_;
+    undefined4 hide_HUD; //probably has more flags in it
     undefined4 __277c;
     undefined4 __2780;
     undefined4 __2784;
@@ -756,26 +901,26 @@ struct GAME_CETCManager {
     char __28fc[0x20];
     char __291c[0x20];
     int* params_buffer_info;
-    undefined* __2940;
-    undefined* __2944;
-    undefined* __2948;
-    undefined* __294c;
-    undefined* __2950;
-    undefined* __2954;
-    undefined* __2958;
-    undefined* __295c;
-    undefined* __2960;
-    undefined* __2964;
-    undefined* __2968;
-    undefined* __296c;
-    undefined* __2970;
-    undefined* __2974;
-    undefined* __2978;
-    undefined* __297c;
-    undefined* __2980;
-    struct GAME_CETCObjectBase* __2984;
-    undefined* __2988;
-    undefined* __298c;
+    undefined* _Cockpit_CBase;
+    undefined* _TitleLoop_CBase;
+    undefined* _CharSelect_CBase;
+    undefined* _Profile_CBase;
+    undefined* _VSInfo_CBase;
+    undefined* _Winner_CBase;
+    undefined* _StageInfo_CBase;
+    undefined* _Ending_CBase;
+    undefined* _Ranking_CBase;
+    undefined* _ModeSelect_CBase;
+    undefined* _StaffRoll_CBase;
+    undefined* _Result_CBase;
+    undefined* _MainMenu_CBase;
+    undefined* _StorySelect_CBase;
+    undefined* _Lobby_CBase;
+    undefined* _MyRoomTest_CBase;
+    undefined* _DCC_CBase;
+    struct GAME_CETCObjectBase* _ETCObjectStatic_CBase;
+    struct CharSelect* char_select;
+    undefined* title_loop;
     undefined* __2990;
     undefined* __2994;
     undefined* __2998;
@@ -789,18 +934,21 @@ struct GAME_CETCManager {
     undefined* __29b8;
     undefined* __29bc;
     undefined* __29c0;
-    undefined* __29c4;
+    undefined* net_;
 };
+static_assert(sizeof(GAME_CETCManager) == 10696);
 
 struct AA_ListNode {
-    undefined* vftable;
+    undefined** vftable;
     struct AA_ListNode* next;
     struct AA_ListNode* prev;
 };
+static_assert(sizeof(AA_ListNode) == 12);
 
 struct GGPOPerformanceMonitor {
     undefined __0000[0x6e8];
 };
+static_assert(sizeof(GGPOPerformanceMonitor) == 1768);
 
 struct SaveUtilParams {
     int thread_id_;
@@ -811,6 +959,7 @@ struct SaveUtilParams {
     void* buffer;
     ulong buffer_size;
 };
+static_assert(sizeof(SaveUtilParams) == 32);
 
 struct SaveUtil {
     undefined** vftable;
@@ -828,6 +977,7 @@ struct SaveUtil {
     undefined __0148[4];
     int status_;
 };
+static_assert(sizeof(SaveUtil) == 336);
 
 /*PlaceHolder Class Structure*/
 struct GAME_KeyControler {
@@ -845,6 +995,7 @@ struct GAME_KeyControler {
     undefined __0049[0xb];
     undefined4 __0054;
 };
+static_assert(sizeof(GAME_KeyControler) == 88);
 
 struct SCENE_CVSInfo {
     struct SCENE_CBase base;
@@ -877,6 +1028,7 @@ struct SCENE_CVSInfo {
     undefined4 __00c8;
     undefined4 __00cc;
 };
+static_assert(sizeof(SCENE_CVSInfo) == 208);
 
 struct BBSave {
     undefined __0000[8];
@@ -899,8 +1051,11 @@ struct BBSave {
     int __a608[0x5a]; //rest of training menu
     int __a770[0x512];
     int training_menu_values_extra[4];
-    undefined4 __bbc8[0x1333c];
+    undefined4 __bbc8[2];
+    undefined4 game_money;
+    undefined4 __bbd4[0x13339];
 };
+static_assert(sizeof(BBSave) == 362680);
 
 struct ReplayList {
     char pad_0x0[8];
@@ -909,6 +1064,7 @@ struct ReplayList {
     uint count;
     undefined __165dc[4];
 };
+static_assert(sizeof(ReplayList) == 91616);
 
 struct CSaveDataManager {
     undefined** vftable;
@@ -934,6 +1090,7 @@ struct CSaveDataManager {
     struct ReplayList replay_list;
     undefined __1c7810[0x30];
 };
+static_assert(sizeof(CSaveDataManager) == 1865792);
 
 struct InputQueue_ {
     int _id;
@@ -951,11 +1108,13 @@ struct InputQueue_ {
     undefined __0e46;
     undefined __0e47;
 };
+static_assert(sizeof(InputQueue_) == 3656);
 
 struct GAMESTEAM_SystemKeyController {
     undefined* vftable;
     undefined __0004[0x54];
 };
+static_assert(sizeof(GAMESTEAM_SystemKeyController) == 88);
 
 struct SCENE_CBattle {
     struct SCENE_CBase base;
@@ -964,10 +1123,12 @@ struct SCENE_CBattle {
     int __006c;
     undefined4 __0070;
 };
+static_assert(sizeof(SCENE_CBattle) == 116);
 
 struct _20bdc_sized_plaaceholder {
     undefined __0000[0x20bdc];
 };
+static_assert(sizeof(_20bdc_sized_plaaceholder) == 134108);
 
 enum MatchState_ {
     MatchState_NotStarted = 0,
@@ -980,8 +1141,8 @@ enum MatchState_ {
 };
 
 struct MatchInfo {
-    int flags_;
-    int rounds_total;
+    int flags; //8: match finished?
+    int rounds_to_win;
     int round;
     int wins_p1;
     int wins_p2;
@@ -990,9 +1151,12 @@ struct MatchInfo {
     int time;
     undefined __0020[0x10];
     enum MatchState_ match_state;
-    undefined __0034[0x34];
+    undefined4 __0034;
+    int winner;
+    undefined __003c[0x2c];
     undefined timer[0x1a8]; //of type BATTLE_CSpeedStarModeTimeCtrl
 };
+static_assert(sizeof(MatchInfo) == 528);
 
 struct BATTLE_CObjectManager {
     undefined** vftable;
@@ -1000,18 +1164,19 @@ struct BATTLE_CObjectManager {
     undefined** vftable_2;
     int events[8];
     int events_count;
-    undefined4 __0030[3]; //1,1,1?
+    int controls_enabled_; //1,1,1? turned off for intro/outro, by event 6?
+    undefined4 __0034[2];
     undefined4 __003c[3]; //0,1,2?
     undefined* src_hash_tables[6][6];
     undefined* __00d8[0x28];
     int __0178[0x28];
     undefined __0218[0xa0];
-    struct _20bdc_sized_plaaceholder __02b8[3];
+    struct _20bdc_sized_plaaceholder _20bdc_sized_placeholders_[3];
     undefined __6264c[2][0x94];
     int entity_count;
     undefined __62778[0xc];
     struct OBJ_CCharBase** entity_list; //3 different arrays with the same values of [p1, p2] + obj_entities
-    struct OBJ_CCharBase** entity_list_1;
+    struct OBJ_CCharBase** entity_list_1; //sorted at 00158154?
     struct OBJ_CCharBase** entity_list_2;
     struct OBJ_CCharBase* obj_entities[0xfa]; //actually OBJ_CBase*, each of size 0x2248
     struct OBJ_CCharBase* player1_entity;
@@ -1029,10 +1194,12 @@ struct BATTLE_CObjectManager {
     undefined __83e48[0x14];
     int* entity_buffer_info; //holds [buffer_ptr, size, algnment=0x10?, offset?, offset?, index?]
 };
+static_assert(sizeof(BATTLE_CObjectManager) == 540256);
 
 struct UdpMsg {
     undefined __0000[0x1020];
 };
+static_assert(sizeof(UdpMsg) == 4128);
 
 /*PlaceHolder Class Structure*/
 struct BATTLE_CLoadTask {
@@ -1044,15 +1211,16 @@ struct BATTLE_CLoadTask {
     int state;
     undefined4 state1;
 };
+static_assert(sizeof(BATTLE_CLoadTask) == 33756);
 
 /* /winnt.h/_RTL_CRITICAL_SECTION */
-struct _RTL_CRITICAL_SECTION{ undefined __0000[0x18]; };
+struct _RTL_CRITICAL_SECTION_placeholder { undefined __0000[0x18]; };
 
 struct AAWin_CFileReader_Thread {
     undefined** vftable;
     undefined __0004[8];
     void* thread_handle;
-    struct _RTL_CRITICAL_SECTION crit;
+    struct _RTL_CRITICAL_SECTION_placeholder crit;
     undefined4* buffer_of_indices_;
     undefined4 index_1_;
     undefined4 queue_index_;
@@ -1063,11 +1231,13 @@ struct AAWin_CFileReader_Thread {
     undefined __0056;
     undefined __0057;
 };
+static_assert(sizeof(AAWin_CFileReader_Thread) == 88);
 
 struct UdpMsg__connect_status {
     int disconnected:1;
     int last_frame:31;
 };
+static_assert(sizeof(UdpMsg__connect_status) == 4);
 
 /*PlaceHolder Class Structure*/
 struct SteamPeer2PeerBackend {
@@ -1093,6 +1263,7 @@ struct SteamPeer2PeerBackend {
     struct UdpMsg__connect_status _local_connect_status[2];
     undefined __21788[8];
 };
+static_assert(sizeof(SteamPeer2PeerBackend) == 137104);
 
 struct AADX_CDynamicTextureList_ {
     undefined* vtable;
@@ -1109,6 +1280,7 @@ struct AADX_CDynamicTextureList_ {
     uint __0054;
     int __0058;
 };
+static_assert(sizeof(AADX_CDynamicTextureList_) == 92);
 
 struct SteamPeer2PeerBackend__VFTABLE_ {
     pointer destructor;
@@ -1116,6 +1288,7 @@ struct SteamPeer2PeerBackend__VFTABLE_ {
     pointer Add_Remote_mine;
     pointer AddLocalInput;
 };
+static_assert(sizeof(SteamPeer2PeerBackend__VFTABLE_) == 16);
 
 struct AASTEAM_CNetworker {
     struct AA_CNetworker base;
@@ -1124,9 +1297,11 @@ struct AASTEAM_CNetworker {
     undefined __1238[0x1a00];
     undefined __2c38[0xa08];
     undefined __3640[2][0x40][8];
-    void* callback_; //CCallbackImpl<16> *
-    undefined __3a44[0xc];
+    void* invite_callback; //CCallbackImpl<16> *
+    ulonglong lobby_id;
+    undefined __3a4c[4];
 };
+static_assert(sizeof(AASTEAM_CNetworker) == 14928);
 
 struct SnapshotManager {
     struct SnapshotManager__struct _saved_states_related_struct[0xa];
@@ -1135,10 +1310,12 @@ struct SnapshotManager {
     undefined* _base_of_snapshot_mem;
     undefined __02dc[4];
 };
+static_assert(sizeof(SnapshotManager) == 736);
 
 struct GAME_CNetworkTask {
     struct AA_TaskNode base;
 };
+static_assert(sizeof(GAME_CNetworkTask) == 24);
 
 enum GGPO_ERRORCODE {
     GGPO_ERRORCODE_GENERAL_FAILURE = -1,
@@ -1164,11 +1341,13 @@ struct BackendStaticStruct__0x8 {
     undefined* _value_was_0x535539C7_in_an_instance_long_ago;
     undefined* _value_was_0x01100001_in_an_instance_long_ago;
 };
+static_assert(sizeof(BackendStaticStruct__0x8) == 544);
 
 struct GAME_BattleSynthKeyControler {
     undefined** vftable;
     int index; //0 or 1
 };
+static_assert(sizeof(GAME_BattleSynthKeyControler) == 8);
 
 struct DAT_00612718_sound1_ {
     undefined __0000[0xc];
@@ -1189,6 +1368,61 @@ struct DAT_00612718_sound1_ {
     undefined4 __0180;
     undefined __0184[4];
 };
+static_assert(sizeof(DAT_00612718_sound1_) == 392);
+
+struct NetUserData {
+    ulonglong steam_id;
+    wchar_t username[0x10];
+    undefined __0028[0xa2];
+    undefined region_[2];
+    undefined4 __00cc;
+    undefined __00d0[0xc4]; //start of some struct
+    byte netcolor;
+    byte netcolor_win_counter;
+    undefined __0196[2];
+    undefined __0198[0x607c];
+    wchar_t quick_message_[0x14];
+    undefined __623c[0x1cad4];
+    undefined room[0x508]; //Room struct in BBIM
+    undefined* room_member_entry;
+    undefined __2321c[0x50];
+    undefined __2326c[6][0x68a4];
+    undefined4 __4a644;
+};
+static_assert(sizeof(NetUserData) == 304712);
+
+struct ISteamUser_vftable {
+    undefined* GetHSteamUser;
+    undefined* BLoggedOn;
+    undefined* GetSteamID;
+    undefined* InitiateGameConnection;
+    undefined* TerminateGameConnection;
+    undefined* TrackAppUsageEvent;
+    undefined* GetUserDataFolder;
+    undefined* StartVoiceRecording;
+    undefined* StopVoiceRecording;
+    undefined* GetAvailableVoice;
+    undefined* GetVoice;
+    undefined* DecompressVoice;
+    undefined* GetVoiceOptimalSampleRate;
+    undefined* GetAuthSessionTicket;
+    undefined* BeginAuthSession;
+    undefined* EndAuthSession;
+    undefined* CancelAuthTicket;
+    undefined* UserHasLicenseForApp;
+    undefined* BIsBehindNAT;
+    undefined* AdvertiseGame;
+    undefined* RequestEncryptedAppTicket;
+    undefined* GetEncryptedAppTicket;
+    undefined* GetGameBadgeLevel;
+    undefined* GetPlayerSteamLevel;
+    undefined* RequestStoreAuthURL;
+    undefined* BIsPhoneVerified;
+    undefined* BIsTwoFactorEnabled;
+    undefined* BIsPhoneIdentifying;
+    undefined* BIsPhoneRequiringVerification;
+};
+static_assert(sizeof(ISteamUser_vftable) == 116);
 
 struct static_DAT_of_PTR_on_load_4_ {
     byte padding_0x0[0xc];
@@ -1229,6 +1463,7 @@ struct static_DAT_of_PTR_on_load_4_ {
     char __0184;
     undefined __0185[0x14f];
 };
+static_assert(sizeof(static_DAT_of_PTR_on_load_4_) == 724);
 
 struct DAT_121e450 {
     int __0000;
@@ -1254,6 +1489,7 @@ struct DAT_121e450 {
     undefined4 __9584c;
     undefined4 __95850;
 };
+static_assert(sizeof(DAT_121e450) == 612436);
 
 /*maybe the definition it gets from the steam servers?*/
 struct room_settings_intemediary {
@@ -1270,16 +1506,13 @@ struct room_settings_intemediary {
     undefined __0074[8];
     int rematch; //0x48=unlimited, 0x49=ft2, 0x4a=ft3, 0x4b=ft5, 0x4c= ft10, if none of the previous no rematch
 };
-
-struct room_settings_upper_intermediary_ {
-    undefined __0000[0x10c];
-    struct room_settings_intemediary room_settings_intermediary;
-};
+static_assert(sizeof(room_settings_intemediary) == 128);
 
 struct Buffer {
     undefined* data;
     int size;
 };
+static_assert(sizeof(Buffer) == 8);
 
 struct SCENE_CBase_vftable {
     uint* dtor;
@@ -1296,10 +1529,12 @@ struct SCENE_CBase_vftable {
     uint* func_GSS_11_empty;
     uint* func_GSS_2_inc;
 };
+static_assert(sizeof(SCENE_CBase_vftable) == 52);
 
 struct Factory {
     undefined** vftable;
 };
+static_assert(sizeof(Factory) == 4);
 
 /*stores Cinput objects for KeyControllers*/
 struct CInputList {
@@ -1308,14 +1543,167 @@ struct CInputList {
     int count;
     undefined* first_; //one of the items
 };
+static_assert(sizeof(CInputList) == 16);
+
+struct ISteamNetworking_vftable {
+    undefined* SendP2PPacket;
+    undefined* IsP2PPacketAvailable;
+    undefined* ReadP2PPacket;
+    undefined* AcceptP2PSessionWithUser;
+    undefined* CloseP2PSessionWithUser;
+    undefined* CloseP2PChannelWithUser;
+    undefined* GetP2PSessionState;
+    undefined* AllowP2PPacketRelay;
+    undefined* CreateListenSocket;
+    undefined* CreateP2PConnectionSocket;
+    undefined* CreateConnectionSocket;
+    undefined* DestroySocket;
+    undefined* DestroyListenSocket;
+    undefined* SendDataOnSocket;
+    undefined* IsDataAvailableOnSocket;
+    undefined* RetrieveDataFromSocket;
+    undefined* IsDataAvailable;
+    undefined* RetrieveData;
+    undefined* GetSocketInfo;
+    undefined* GetListenSocketInfo;
+    undefined* GetSocketConnectionType;
+    undefined* GetMaxPacketSize;
+};
+static_assert(sizeof(ISteamNetworking_vftable) == 88);
+
+struct ISteamMatchmaking_vftable {
+    undefined* GetFavoriteGameCount;
+    undefined* GetFavoriteGame;
+    undefined* AddFavoriteGame;
+    undefined* RemoveFavoriteGame;
+    undefined* RequestLobbyList;
+    undefined* AddRequestLobbyListStringFilter;
+    undefined* AddRequestLobbyListNumericalFilter;
+    undefined* AddRequestLobbyListNearValueFilter;
+    undefined* AddRequestLobbyListFilterSlotsAvailable;
+    undefined* AddRequestLobbyListDistanceFilter;
+    undefined* AddRequestLobbyListResultCountFilter;
+    undefined* AddRequestLobbyListCompatibleMembersFilter;
+    undefined* GetLobbyByIndex;
+    undefined* CreateLobby;
+    undefined* JoinLobby;
+    undefined* LeaveLobby;
+    undefined* InviteUserToLobby;
+    undefined* GetNumLobbyMembers;
+    undefined* GetLobbyMemberByIndex;
+    undefined* GetLobbyData;
+    undefined* SetLobbyData;
+    undefined* GetLobbyDataCount;
+    undefined* GetLobbyDataByIndex;
+    undefined* DeleteLobbyData;
+    undefined* GetLobbyMemberData;
+    undefined* SetLobbyMemberData;
+    undefined* SendLobbyChatMsg;
+    undefined* GetLobbyChatEntry;
+    undefined* RequestLobbyData;
+    undefined* SetLobbyGameServer;
+    undefined* GetLobbyGameServer;
+    undefined* SetLobbyMemberLimit;
+    undefined* GetLobbyMemberLimit;
+    undefined* SetLobbyType;
+    undefined* SetLobbyJoinable;
+    undefined* GetLobbyOwner;
+    undefined* SetLobbyOwner;
+    undefined* SetLinkedLobby;
+    undefined* CheckForPSNGameBootInvite;
+};
+static_assert(sizeof(ISteamMatchmaking_vftable) == 156);
+
+struct maybe_network_stuff_static_ {
+    undefined __0000[0x110];
+};
+static_assert(sizeof(maybe_network_stuff_static_) == 272);
+
+struct CharSelect {
+    undefined4 __0000;
+    undefined4 __0004;
+    undefined4 __0008;
+    float _char_to_cursor_pos[0x24][2];
+    undefined __012c[0x2e0];
+    int __040c[0x24];
+    undefined __049c[0x4b0];
+    int __094c[2];
+    int flags;
+    undefined __0958[4];
+    int __095c;
+    float p_cursor[2][2]; //p1 x, p1 y, p2 x, p2 y
+    undefined __0970[0x10];
+    int __0980[2];
+    int __0988[2];
+    undefined __0990[8];
+    int __0998[2];
+    int __09a0[2];
+    int __09a8[2];
+    int p_select_state_[2];
+    int __09b8[2];
+    undefined __09c0[0x4c];
+    int p_char_index[2];
+    int p_palette_index[2];
+    undefined __0a1c[8];
+    int p_stylish[2];
+    int __0a2c[2];
+    undefined __0a34[0x100];
+    int time_left_;
+    int time_left_in_frames_;
+    int __0b3c[2];
+    undefined __0b44[0x23c];
+    int __0d80[2];
+    undefined __0d88[0x208];
+    char __0f90[0x100];
+    char __1090[0x100];
+    undefined __1190[0x100];
+    undefined _stages_struct[0x31][0x50];
+    int stage_cursor[2]; //x, y
+    undefined __21e8[0x260];
+    int stage_cursor_last_[2];
+    int music_cursor[2]; //start of a music struct
+    undefined __2458[0x47][0x14];
+    int __29e4;
+    undefined __29e8[0x14];
+    int music_index_;
+    undefined __2a00[0x2c];
+    int __2a2c[2];
+    int __2a34[2];
+    int __2a3c[2];
+    int __2a44[2];
+    int __2a4c[2];
+    int __2a54[2];
+    int __2a5c[2];
+    int __2a64[2];
+    undefined __2a6c;
+    undefined __2a6d;
+    undefined __2a6e;
+    undefined __2a6f;
+};
+static_assert(sizeof(CharSelect) == 10864);
+
+struct PlayerDataBig {
+    undefined4 valid_;
+    undefined4 __0004;
+    undefined4 __0008;
+    undefined4 __000c;
+    undefined4 __0010[0x146];
+    undefined4 char_index;
+    undefined4 palette_index;
+    undefined4 __0530; //== small._0xc ?
+    undefined4 __0534;
+    undefined4 stylish;
+    undefined __053c[0x1d4];
+};
+static_assert(sizeof(PlayerDataBig) == 1808);
 
 /*stores flags for SaveUtil, but also something to do with UpdateWindow?*/
-struct DAT_01304bf8 {
+struct AutoSaveStruct {
     int action;
     int prev_action;
     int prev_action_1_;
     int __000c;
-    int __0010;
+    int frames_in_action_;
     int __0014;
     int __0018;
     int __001c;
@@ -1324,9 +1712,9 @@ struct DAT_01304bf8 {
     int __0028;
     int __002c;
     int __0030;
-    int __0034;
+    int replay_index;
     int __0038;
-    int __003c;
+    int done_;
     int __0040;
     int __0044;
     int saveutil_flags; //1: bbsave, 2: replay. 4: replay_list
@@ -1334,10 +1722,32 @@ struct DAT_01304bf8 {
     int prev_save_action;
     int __0054;
 };
+static_assert(sizeof(AutoSaveStruct) == 88);
 
-struct maybe_network_stuff_static_ {
-    undefined __0000[0x110];
+struct SteamInterfaces {
+    undefined*** client;
+    struct ISteamUser_vftable** user;
+    undefined*** friends;
+    undefined*** utils;
+    struct ISteamMatchmaking_vftable** matchmaking;
+    undefined*** userstats;
+    undefined*** apps;
+    undefined*** matchmakingservers;
+    struct ISteamNetworking_vftable** networking;
+    undefined*** storage;
+    undefined*** screenshots;
+    undefined*** http;
+    undefined*** messages;
+    undefined*** controller;
+    undefined*** ugc;
+    undefined*** pplist;
+    undefined*** music;
+    undefined*** musicremote;
+    undefined*** htmlsurface;
+    undefined*** inventory;
+    undefined*** video;
 };
+static_assert(sizeof(SteamInterfaces) == 84);
 
 struct FPAC {
     char __0000[4]; //"FPAC"
@@ -1350,6 +1760,7 @@ struct FPAC {
     undefined4 __001c;
     undefined items[0x10]; //variable length
 };
+static_assert(sizeof(FPAC) == 48);
 
 struct SettingsMenuItem {
     int active;
@@ -1360,12 +1771,14 @@ struct SettingsMenuItem {
     char name[0x20];
     int bbsave_index;
 };
+static_assert(sizeof(SettingsMenuItem) == 56);
 
 struct MenuItem {
     int action_;
     char id[0x20];
     char title[0x20];
 };
+static_assert(sizeof(MenuItem) == 68);
 
 struct SubMenu {
     int pad_00;
@@ -1376,88 +1789,100 @@ struct SubMenu {
     int item_index;
     struct MenuItem items[0x18];
 };
+static_assert(sizeof(SubMenu) == 1712);
 
 enum GameMode {
-    Arcade = 1,
-    Story = 4,
-    Versus = 5,
-    Training = 6,
-    Tutorial = 7,
-    Challenge = 8,
-    Gallery___ = 9,
-    ItemShop___ = 0xa,
-    ReplayTheater = 0xb,
-    TitleScreen = 0xc,
-    MainMenuScreen = 0xd,
-    _ = 0xe,
-    Online = 0xf,
-    Abyss = 0x10,
-    __ = 0x11,
-    DCodeEdit = 0x12,
+    GameMode_Arcade = 1,
+    GameMode_Story = 4,
+    GameMode_Versus = 5,
+    GameMode_Training = 6,
+    GameMode_Tutorial = 7,
+    GameMode_Challenge = 8,
+    GameMode_Gallery = 9,
+    GameMode_ItemShop = 0xa,
+    GameMode_ReplayTheater = 0xb,
+    GameMode_TitleScreen = 0xc,
+    GameMode_MainMenuScreen = 0xd,
+    GameMode_Online = 0xf,
+    GameMode_Abyss = 0x10,
+    GameMode_DCodeEdit = 0x12,
 };
 
-/*it the same as the enum GameState in gamestate.h in bbcfim*/
-enum GameScene {
-    Warning = 1,
-    ArcsysLogo = 2,
-    IntroVideoPlaying = 3,
-    TitleScreen = 4,
-    Ranking = 5,
-    CharSelect = 6,
-    ModeSelect = 0xb,
-    Profile = 0xc,
-    StageSelect = 0xd,
-    CVSInfo_versus_screen_ = 0xe,
-    Battle = 0xf,
-    Winner = 0x12,
-    Ending = 0x13,
-    StaffRoll = 0x14,
-    Result = 0x15,
-    Extra = 0x16,
-    New_Name = 0x17,
-    StorySelect = 0x18,
-    Gallery = 0x19,
-    ReplayTheater = 0x1a,
-    MainMenu = 0x1b,
-    TutorialUI = 0x1c,
-    Library = 0x1d,
-    MatchResult = 0x1e,
-    Lobby = 0x1f,
-    CAdvCtrTaskFactory = 0x20,
-    AbyssUI = 0x22,
-    TestMyRoom = 0x26,
-    Dcc = 0x27,
-    TestRingcommand = 0x28,
-    PreTeamBattle = 0x29,
+enum GameState {
+    GameState_Warning = 1,
+    GameState_ArcsysLogo = 2,
+    GameState_IntroVideoPlaying = 3,
+    GameState_TitleScreen = 4,
+    GameState_CharacterSelectionScreen = 6,
+    GameState_ArcadeActSelectScreen = 0xb,
+    GameState_ScoreAttackModeSelectScreen = 0xb,
+    GameState_SpeedStarModeSelectScreen = 0xb,
+    GameState_ArcadeCharInfoScreen = 0xc,
+    GameState_ArcadeStageSelectScreen = 0xd,
+    GameState_VersusScreen = 0xe,
+    GameState_InMatch = 0xf,
+    GameState_VictoryScreen = 0x10,
+    GameState_VictoryScreen_1 = 0x11,
+    GameState_VictoryScreen_2 = 0x12,
+    GameState_StoryMenu = 0x18,
+    GameState_GalleryMenu = 0x19,
+    GameState_ItemMenu = 0x19,
+    GameState_ReplayMenu = 0x1a,
+    GameState_MainMenu = 0x1b,
+    GameState_TutorialMenu = 0x1c,
+    GameState_LibraryMenu = 0x1d,
+    GameState_MatchResult = 0x1e,
+    GameState_Lobby = 0x1f,
+    GameState_CAdvCtrlTask = 0x20,
+    GameState_StoryPlaying = 0x21,
+    GameState_AbyssMenu = 0x22,
+    GameStata_TestMyRoom = 0x26,
+    GameState_DCodeEdit = 0x27,
+    GameState_TestRingcommand = 0x28,
+    GameState_PreTeamBattle = 0x29,
 };
+
+struct PlayerDataSmall {
+    undefined4 char_index;
+    undefined4 __0004; //0, 1 or 1, 0? player index?
+    undefined4 palette_index;
+    undefined4 __000c; //0?
+    undefined4 __0010; //const 1? valid? 0 on dummy
+    undefined4 __0014; //0 in Arcade?
+    undefined4 __0018; //0?
+    undefined4 __001c; //reset to 100
+};
+static_assert(sizeof(PlayerDataSmall) == 32);
 
 struct GameVals {
     undefined4 __0000;
     undefined __0004[0x100];
     int flags_;
     enum GameMode GameMode;
-    enum GameScene GameScene;
-    enum GameScene NextGameScene;
+    enum GameState GameScene;
+    enum GameState NextGameScene;
     undefined4 __0114;
-    undefined player_data_[3][0x710];
-    undefined player_data_1_[2][0x20];
+    struct PlayerDataBig player_data_big[3];
+    struct PlayerDataSmall player_data_small[2];
     int active_player;
-    undefined4 __168c;
-    undefined4 __1690;
+    undefined4 stage;
+    undefined4 music;
     undefined __1694[4];
     undefined4 __1698;
     undefined __169c[8];
     undefined4 __16a4;
     undefined4 __16a8;
-    undefined __16ac[0xc];
-    undefined __16b8[2][0x710];
-    undefined __24d8[2][0x20];
-    undefined __2518[0x30];
+    undefined4 GameMode_copy_;
+    undefined __16b0[8];
+    undefined player_data_copy_[2][0x710];
+    undefined player_data_1_copy_[2][0x20];
+    undefined4 active_player_copy_;
+    undefined _other_field_copies[0x2c];
     undefined4 __2548;
     undefined4 __254c;
     undefined4 __2550;
     undefined4 __2554;
-    undefined4 __2558;
+    int _next_scene_alt; //used in 001505a0 CSceneController::_update_1
     undefined4 __255c;
     undefined4 __2560;
     undefined4 __2564;
@@ -1491,7 +1916,7 @@ struct GameVals {
     undefined4 __25dc;
     undefined4 __25e0;
     undefined4 __25e4;
-    undefined __25e8[8];
+    struct OBJ_CCharBase* player_entities_[2];
     int input_controller_index_;
     int synth_controller_index_for_player[2]; //0,1, or 1,0 if you're p2
     undefined __25fc[4];
@@ -1499,6 +1924,7 @@ struct GameVals {
     struct SCENE_CBase* current_scene;
     undefined __2608[8];
 };
+static_assert(sizeof(GameVals) == 9744);
 
 struct FileReaderStruct {
     struct FileReaderStructItem* queue;
@@ -1509,18 +1935,47 @@ struct FileReaderStruct {
     int __0014;
     int __0018;
 };
+static_assert(sizeof(FileReaderStruct) == 28);
+
+/*size should be 0x2b0, but doesn't fit in stack?*/
+struct MenuMessage {
+    undefined* __0000;
+    char name_[0x40];
+    undefined __0044[4];
+    undefined4 __0048;
+    char type_[0x40];
+    undefined4 index_;
+    undefined4 length_;
+    char items_[0x40];
+    char __00d4[0x40];
+    undefined __0114[0x100];
+    undefined4 index_1_;
+    undefined4 length_1_;
+    undefined __021c[0x84];
+};
+static_assert(sizeof(MenuMessage) == 672);
 
 struct MainMenu {
-    char pad_00[0x54];
+    undefined __0000[8];
+    undefined4 __0008;
+    undefined __000c[0x2c];
+    undefined4 __0038;
+    undefined __003c[0x18];
     int menu_level;
-    char pad_0058[0x18];
+    undefined __0058[0xc];
+    int state;
+    undefined __0068[8];
     struct SubMenu sub_menus[0x10];
-    int pad_6B70;
+    int __6b70;
     int sub_menu_index;
-    undefined __6b78[0x6dc];
-    int replay_list_view[6];
+    undefined __6b78[0x88];
+    int p1_controller; //-1 for CPU
+    int p2_controller;
+    undefined __6c08[0x64c];
+    int replay_list_view[6]; //int selected_inedx, first_index_in_view, last_index_in_view, ??, ??, ??
     undefined __726c[0x1040];
 };
+static_assert(sizeof(MainMenu) == 33452);
 
 struct FileReaderStructItem {
     undefined* buffer;
@@ -1534,19 +1989,140 @@ struct FileReaderStructItem {
     undefined4 __011c; //set_up param_8=0
     undefined4 file_offset; //set_up 0
 };
+static_assert(sizeof(FileReaderStructItem) == 292);
 
 struct NetworkStruct {
-    int state_;
-    undefined __0004[0x26c];
+    int state;
+    int state_1_;
+    undefined __0008[0x1c];
+    undefined4 action_queue[0x20];
+    int queue_start;
+    int queue_end;
+    undefined4 __00ac;
+    undefined __00b0[8];
+    int message_id;
+    undefined4 __00bc;
+    undefined4 __00c0;
+    undefined4 __00c4;
+    undefined4 __00c8;
+    undefined __00cc[0x40];
+    struct room_settings_intemediary room_settings;
+    undefined __018c[0x60];
+    int lobby_index_;
+    undefined __01f0[0x80];
     undefined4 __0270;
     undefined4 __0274;
     undefined4 __0278;
-    undefined __027c[0xac];
-    undefined chat_input[0x40];
+    undefined __027c[0x64];
+    wchar_t chat_input_copy[0x20];
+    undefined __0320[8];
+    wchar_t chat_input[0x20];
     undefined __0368[0xd0];
     undefined4 chat_send_flag_;
     undefined __043c[4];
 };
+static_assert(sizeof(NetworkStruct) == 1088);
+
+/*PlaceHolder Class Structure*/
+struct AADX_CRenderer {
+    undefined** vftable;
+    undefined __0004[0x2c];
+    undefined*** directXDevice;
+    undefined __0034[0x1214];
+};
+static_assert(sizeof(AADX_CRenderer) == 4680);
+
+/*PlaceHolder Class Structure*/
+struct AASTEAM_SearchResult {
+    undefined** vftable;
+    ulonglong steam_id;
+    undefined __000c[8];
+};
+static_assert(sizeof(AASTEAM_SearchResult) == 20);
+
+struct GAMESTEAM_CNetworkServer {
+    undefined** vftable;
+    undefined4 __0004;
+    undefined __0008[0xd0];
+    undefined lobby_data[8]; //param2 in CreateLobby_with_data
+    wchar_t username[0x10];
+    undefined __0100[8];
+    wchar_t username_1[0x10];
+    undefined __0128[0xb0];
+    int host_netcolor;
+    undefined __01dc[0xf4]; //end of lobby_data struct?
+    undefined _lobby_search_params[0x108]; //filled in by FUN_000a94c0
+    undefined _join_lobby_params[0x408]; //filled in by FUN_000a89d0
+    undefined __07e0[0x200];
+    undefined __09e0[0xca];
+    undefined __0aaa[0xe];
+    undefined4 __0ab8;
+    undefined __0abc[0x20];
+    struct AA_LooseList lobby_search_results; //list of GAMESTEAM_SearchResultNode
+    int lobby_count;
+    struct GAMESTEAM_SearchResultNode* lobby_node;
+    undefined4 __0af0;
+    int lobby_order_[0x20]; //just 0,1,2,...31
+    undefined __0b74[0x4c];
+    undefined _CreateLobby_arg[0x90]; //AASTEAM_CSessionCreateObj
+    undefined _JoinLobby_arg[0x70]; //AASTEAM_CSessionJoinObj
+    undefined _RequestLobbyList_arg[0x2c]; //AASTEAM_CSessionSearchObj ...
+    undefined(* _steam_params)[0x4c];
+    int search_results_count;
+    struct AASTEAM_SearchResult search_results[0x32];
+    undefined4 __10dc;
+    undefined call_result[0x20];
+    undefined __1100[0x70]; //AASTEAM_CSessionJoinObj
+    undefined __1170[0x1460];
+    ulonglong lobby_id;
+    undefined __25d8[0x18];
+};
+static_assert(sizeof(GAMESTEAM_CNetworkServer) == 9712);
+
+/*PlaceHolder Class Structure*/
+struct GAMESTEAM_VirtualKeyboard {
+    undefined** vftable;
+    undefined __0004[0x220];
+};
+static_assert(sizeof(GAMESTEAM_VirtualKeyboard) == 548);
+
+struct CNetworkUIPlayerMatchCreate {
+    undefined** vftable;
+    int open_;
+    undefined __0008[0x1c4];
+    int room_type; //1: FFA
+    undefined __01d0[0xb4];
+    int room_capacity; //add 2 to get real capacity
+    undefined __0288[0xb4];
+    int room_invitations;
+    undefined __0340[0xb4];
+    int room_connectivity;
+    undefined __03f8[0xb4];
+    int room_color;
+    undefined __04b0[0xb4];
+    int room_match_limit; //0: no limit
+    undefined __0568[0xb4];
+    int room_rematch;
+    undefined __0620[0xb4];
+    int room_auto_pass;
+    undefined __06d8[0xb4];
+    int room_skip_time;
+    undefined __0790[0xb4];
+    int room_chat;
+    undefined __0848[0xb4];
+    int room_rotation;
+    undefined __0900[0xb4];
+    int room_rounds_to_win;
+    undefined __09b8[0xb4];
+    int room_time;
+    undefined __0a70[0xcdc];
+    undefined4 __174c;
+    undefined __1750[0x10];
+    wchar_t room_name[0x10];
+    undefined __1780[0x60];
+    int modified;
+};
+static_assert(sizeof(CNetworkUIPlayerMatchCreate) == 6116);
 
 struct BBCF {
     undefined __0000[0x4f90];
@@ -1575,18 +2151,24 @@ struct BBCF {
     undefined AA_CFileController__dtor[0x30]; //000072b0
     undefined AA_TaskNode__dtor[0x60]; //000072e0
     undefined AA_CFileController__update_task[0x230]; //00007340
-    undefined AA_CFileCtrlFactory__create_thread[0x270]; //00007570
+    undefined AA_CFileCtrlFactory__create_thread[0x20]; //00007570
+    undefined AA_CNetworkReceiver__dtor[0xf0]; //00007590
+    undefined AA_CNetworkReceiver___update_task[0x40]; //00007680
+    undefined AA_CNetworkReceiverFactory___create[0x120]; //000076c0
     undefined AA_CRenderController___update_task[0x140]; //000077e0
-    undefined AA_CSoundController___update_task[0x50]; //00007920
-    undefined _wcscpy_s_32_[0x13e]; //00007970
+    undefined AA_CSoundController___update_task[0x20]; //00007920
+    undefined _ctor_for_CSteamID_[0x30]; //00007940
+    undefined _wcscpy_s_32_[0x100]; //00007970
+    undefined _get_steam_interfaces[0x3e]; //00007a70
     undefined inject_SteamUser[0x15]; //00007aae
     undefined inject_SteamFriends[0x14]; //00007ac3
     undefined inject_SteamUtils[0x15]; //00007ad7
     undefined inject_SteamMatchmaking[0x2e]; //00007aec
     undefined inject_SteamUserStats[0x32]; //00007b1a
     undefined inject_SteamNetworking[0x1a4]; //00007b4c
-    undefined _get_steam_id_[0x170]; //00007cf0
-    undefined _steam_init_pipe_[0xc0]; //00007e60
+    undefined _get_steam_id_[0x150]; //00007cf0
+    undefined _get_steam_friends[0x20]; //00007e40
+    undefined _steam_init[0xc0]; //00007e60
     undefined _strcat32[0x800]; //00007f20
     undefined _get_AA_CCameraManager[0x250]; //00008720
     undefined _strcpy256[0xd0]; //00008970
@@ -1612,7 +2194,8 @@ struct BBCF {
     undefined _get_DAT_00612990[0xb0]; //00009f30
     undefined _get_DAT_00612978[0x3e0]; //00009fe0
     undefined _get_DAT_006129b0[0x660]; //0000a3c0
-    undefined AA_CParticleManager__ctor[0x870]; //0000aa20
+    undefined AA_CParticleManager__ctor[0x630]; //0000aa20
+    undefined AA_CParticleManager___set_enabled_[0x240]; //0000b050
     undefined _get_AA_CParticleManager[0xa70]; //0000b290
     undefined _get_DAT_00612a68[0x160]; //0000bd00
     undefined hash_1_[0xa0]; //0000be60
@@ -1627,11 +2210,11 @@ struct BBCF {
     undefined _get_DAT_00623630_sound_[0xb0]; //0000e1a0
     undefined _get_DAT_00623630_sound__item[0x280]; //0000e250
     undefined _get_DAT_00623658[0x1e0]; //0000e4d0
-    undefined _get_DAT_00623674[0x300]; //0000e6b0
+    undefined _get_DAT_00623674_palettes_[0x300]; //0000e6b0
     undefined _get_DAT_00623698_render2_[0x560]; //0000e9b0
     undefined AA_CApplication__ctor[0x60]; //0000ef10
     undefined AA_CApplication__dtor_[0x50]; //0000ef70
-    undefined AA_CApplication__dtor_[0x6b0]; //0000efc0
+    undefined AA_CApplication__dtor_1[0x6b0]; //0000efc0
     undefined AA_CFontBase___call_vftable_0xc[0x3100]; //0000f670
     undefined _get_DAT_006236f0[0x1bb0]; //00012770
     undefined _get_AA_CFriendList[0xf0]; //00014320
@@ -1649,14 +2232,31 @@ struct BBCF {
     undefined AASTEAM_CInputXInputPad__init[0x460]; //0001a520
     undefined _LeaveCriticalSection_1[0x390]; //0001a980
     undefined AASTEAM_ThreadObject___ctor[0x1b0]; //0001ad10
-    undefined CCallbackImpl_16___ctor_[0x2e0]; //0001aec0
-    undefined AASTEAM_CNetworker__ctor[0x10d0]; //0001b1a0
-    undefined AASTEAM_CSessionSearchObj__ranked_search_[0x4c0]; //0001c270
-    undefined _steam_copy_response_[0x1d0]; //0001c730
+    undefined CCallbackImpl_lt16_gt__ctor[0x2e0]; //0001aec0
+    undefined AASTEAM_CNetworker__ctor[0x170]; //0001b1a0
+    undefined _ctor_for_lobby_search_results[0xc80]; //0001b310
+    undefined _CreateLobby_[0xf0]; //0001bf90
+    undefined _LeaveLobby_[0x90]; //0001c080
+    undefined AASTEAM_CNetworker___JoinLobby_[0xd0]; //0001c110
+    undefined _LeaveLobby_1[0x90]; //0001c1e0
+    undefined AASTEAM_CSessionSearchObj___RequestLobbyList[0x350]; //0001c270
+    undefined AASTEAM_CNetworker___BLoggedOn_[0x170]; //0001c5c0
+    undefined _steam_copy_response_[0x1c0]; //0001c730
+    undefined _read_steam_param_int[0x10]; //0001c8f0
     undefined get_AASTEAM_CNetworker[0x70]; //0001c900
-    undefined _get_DAT_006291e0_lobby_[0x150]; //0001c970
-    undefined AASTEAM_CNetworker___handle_callback[0x480]; //0001cac0
-    undefined ranked_search_callback[0xc50]; //0001cf40
+    undefined _get_lobby_search_results[0x150]; //0001c970
+    undefined AASTEAM_CNetworker___handle_invite_callback[0xd0]; //0001cac0
+    undefined _CreateLobby_callback[0x160]; //0001cb90
+    undefined _GetLobbyMemberData_[0x90]; //0001ccf0
+    undefined _GetLobbyMemberData_1[0x90]; //0001cd80
+    undefined _JoinLobby_callback[0x130]; //0001ce10
+    undefined RequestLobbyList_callback[0x1a0]; //0001cf40
+    undefined AASTEAM_CNetworker___ReadP2PPacket_[0x280]; //0001d0e0
+    undefined _write_steam_param_from_str[0x30]; //0001d360
+    undefined _write_steam_param_from_int[0x60]; //0001d390
+    undefined _get_steam_matchmaking[0x20]; //0001d3f0
+    undefined AASTEAM_CNetworker___update[0x10]; //0001d410
+    undefined _SetLobbyData_[0x770]; //0001d420
     undefined _return_1[0x1750]; //0001db90
     undefined _get_AASTEAM_CRankingReader[0x18f0]; //0001f2e0
     undefined AASTEAM_CReplayDownloadTask___update_task[0x850]; //00020bd0
@@ -1680,9 +2280,10 @@ struct BBCF {
     undefined _get_s_empty_[0x420]; //00038a60
     undefined _assert_0_[0x90]; //00038e80
     undefined _assert_0[0xa70]; //00038f10
-    undefined CSaveDataManager___get_bbsave_0x60[0x2020]; //00039980
+    undefined CSaveDataManager___get_bbsave_0x60[0x1e00]; //00039980
+    undefined AADX_CRenderer___EndScene_[0x220]; //0003b780
     undefined AADX_CRenderer___update_window_[0x150]; //0003b9a0
-    undefined GAMESTEAM_CClassGenerator___get_AADX_CRenderer[0x2880]; //0003baf0
+    undefined _get_AADX_CRenderer[0x2880]; //0003baf0
     undefined _strcpy64_zero_pad_[0x300]; //0003e370
     undefined _get_AADX_CRenderInserter[0x60]; //0003e670
     undefined _get_AADX_CRenderInserter_Less[0x820b]; //0003e6d0
@@ -1691,7 +2292,8 @@ struct BBCF {
     undefined _get_DAT_0065b7f4[0x2f0]; //0004bd40
     undefined AADX_CDynamicTextureListFactory___create[0x850]; //0004c030
     undefined AADX_CDynamicTextrueList__reported_crashes_thread_sometimes[0x13d0]; //0004c880
-    undefined _get_DAT_0065b81c[0xb32]; //0004dc50
+    undefined _get_DAT_0065b81c[0xaf0]; //0004dc50
+    undefined _WriteMiniDump[0x42]; //0004e740
     undefined inject_SetDumpfileCommentString[0x38e]; //0004e782
     undefined entry_1[0x300]; //0004eb10
     undefined _assert_fail_log[0x90]; //0004ee10
@@ -1706,9 +2308,9 @@ struct BBCF {
     undefined AAWin_HQTimer__write_replay_timestamp[0x270]; //0004f710
     undefined AAWin_CFileReader_Thread__ctor[0xb0]; //0004f980
     undefined AAWin_CFileReader_Thread__dtor[0xe0]; //0004fa30
-    undefined AAWin_CFileReader_Thread__dtor[0x60]; //0004fb10
+    undefined AAWin_CFileReader_Thread__dtor_1[0x60]; //0004fb10
     undefined AAWin_CFileReader_Thread__thread_start[0x790]; //0004fb70
-    undefined AAWin_CFileReader_Thread___set_event_0_[0xc0]; //00050300
+    undefined AAWin_CFileReader_Thread___field_0x54_1__set_event_0_[0xc0]; //00050300
     undefined AAWin_CFileReader_Thread___field_0x54__3[0x50]; //000503c0
     undefined AAWin_CFileReader_Thread__get_file_size[0xd0]; //00050410
     undefined get_AAWin_CFileReader_Thread[0x70]; //000504e0
@@ -1716,7 +2318,8 @@ struct BBCF {
     undefined AAWin_CFileReader_Thread__create_thread[0x100]; //000505e0
     undefined AAWin_CFileReader_Thread___try_reading_0x1000_bytes_1[0xd0]; //000506e0
     undefined AAWin_CFileReader_Thread___try_reading_file[0x1c0]; //000507b0
-    undefined AAWin_CFileReader_Thread___check_free_space[0x300]; //00050970
+    undefined AAWin_CFileReader_Thread___check_free_space[0x40]; //00050970
+    undefined AAWin_CFileReader_Thread___field_0x54_0[0x2c0]; //000509b0
     undefined _strcpy64[0x90]; //00050c70
     undefined AA_CSoundEngine_XACT__dtor_[0x40]; //00050d00
     undefined AA_CSoundBank_XACT___AddSoundBank_[0x2a0]; //00050d40
@@ -1755,7 +2358,9 @@ struct BBCF {
     undefined GAME_BattleSynthKeyControler___get_system_controller[0x10]; //000644c0
     undefined GAME_SynthKeyControler___get_system_controller[0x3e0]; //000644d0
     undefined _get_DAT_0065c6d8[0x880]; //000648b0
-    undefined GAMESTEAM_CClassGenerator__ctor[0x4a0]; //00065130
+    undefined GAMESTEAM_CClassGenerator__ctor[0x480]; //00065130
+    undefined GAMESTEAM_CClassGenerator___get_GAMESTEAM_CNetworkServer[0x10]; //000655b0
+    undefined GAMESTEAM_CClassGenerator___get_AASTEAM_CNetworker[0x10]; //000655c0
     undefined AADX_CMovieTextureFactory___create[0x80]; //000655d0
     undefined AA_CCollisionFactory_JON___create[0x80]; //00065650
     undefined AA_CModelFactory_MUA___create[0x80]; //000656d0
@@ -1763,7 +2368,8 @@ struct BBCF {
     undefined AA_CTextureFactory_CmpHIP___create[0x70]; //000657c0
     undefined AA_CTextureFactory_DDS___create[0x80]; //00065830
     undefined AA_CTextureFactory_HIP___create[0x240]; //000658b0
-    undefined GAMESTEAM_CClassGeneratorFactory___create[0x2f30]; //00065af0
+    undefined GAMESTEAM_CClassGeneratorFactory___create[0x160]; //00065af0
+    undefined GAMESTEAM_CClassGenerator___get_GAMESTEAM_VirtualKeyboard[0x2dd0]; //00065c50
     undefined _get_GAMESTEAM_ImeEditBox[0xce0]; //00068a20
     undefined GAMESTEAM_BattleKeyControler___get_input_for_button_[0x130]; //00069700
     undefined AA_CModel_MUA___return_0[0x100]; //00069830
@@ -1771,17 +2377,33 @@ struct BBCF {
     undefined _get_CSTEAMNetworkLobbyData[0x1660]; //0006a820
     undefined _return_100[0x4c0]; //0006be80
     undefined AASTEAM_CSessionCreateObj__ctor[0x120]; //0006c340
-    undefined AASTEAM_CSessionSearchObj__ctor[0x840]; //0006c460
+    undefined AASTEAM_CSessionSearchObj__ctor[0x280]; //0006c460
+    undefined GAMESTEAM_CNetworkServer___ctor[0x1a0]; //0006c6e0
+    undefined GAME_CNetworkServer___ctor[0x420]; //0006c880
     undefined AASTEAM_CSessionSearchObj__dtor[0x220]; //0006cca0
-    undefined AASTEAM_CSessionSearchObj__dtor_1[0x17a0]; //0006cec0
-    undefined GAMESTEAM_CNetworkServer__get_PLAYER_PRIVATE_NUM[0x260]; //0006e660
-    undefined GAMESTEAM_CClassGenerator___get_GAMESTEAM_QoSListner[0x1c0]; //0006e8c0
+    undefined AASTEAM_CSessionSearchObj__dtor_1[0xc0]; //0006cec0
+    undefined GAMESTEAM_SearchResultNode___dtor[0x910]; //0006cf80
+    undefined GAMESTEAM_CNetworkServer___read_lobby_search_results[0x2b0]; //0006d890
+    undefined GAMESTEAM_CNetworkServer___writes_ping[0xc0]; //0006db40
+    undefined GAMESTEAM_SearchResultNode___init[0x270]; //0006dc00
+    undefined GAMESTEAM_CNetworkServer___JoinLobby_from_invite_[0x130]; //0006de70
+    undefined GAMESTEAM_CNetworkServer___JoinLobby_[0x100]; //0006dfa0
+    undefined GAMESTEAM_CNetworkServer___CreateLobby_with_data[0x5c0]; //0006e0a0
+    undefined GAMESTEAM_CNetworkServer___check_PLAYER_PRIVATE_NUM[0x230]; //0006e660
+    undefined GAMESTEAM_SearchResultNode___get_ping[0x30]; //0006e890
+    undefined GAMESTEAM_CClassGenerator___get_GAMESTEAM_CNetworkServer_1[0x1c0]; //0006e8c0
     undefined GAME_CNetworkServer___get_s_empty_[0x10]; //0006ea80
-    undefined GAMESTEAM_CNetworkServer___get_chat[0xeb0]; //0006ea90
-    undefined GAMESTEAM_CNetworkServer__ranked_search_[0x890]; //0006f940
-    undefined GAME_CNetworkServer___return_0[0x280]; //000701d0
-    undefined _vsprintf_s_32[0xd70]; //00070450
-    undefined _check_time_[0x440]; //000711c0
+    undefined GAMESTEAM_CNetworkServer___get_chat[0xb50]; //0006ea90
+    undefined _prepend_chat_message[0xa0]; //0006f5e0
+    undefined GAMESTEAM_CNetworkServer___new_GAMESTEAM_SearchResultNode[0x2c0]; //0006f680
+    undefined GAMESTEAM_CNetworkServer__lobby_search[0x380]; //0006f940
+    undefined GAMESTEAM_SearchResultNode___GetLobbyData[0x330]; //0006fcc0
+    undefined GAMESTEAM_CNetworkServer___prepare_lobby_data_1_[0x1e0]; //0006fff0
+    undefined GAME_CNetworkServer___return_0[0x260]; //000701d0
+    undefined _vsprintf_s_16[0x20]; //00070430
+    undefined _vsprintf_s_32[0x9e0]; //00070450
+    undefined _updates_steam_friends_info[0x390]; //00070e30
+    undefined _check_statistics_occasionally[0x440]; //000711c0
     undefined GAMESTEAM_CRanking___return_0[0x480]; //00071600
     undefined AASTEAM_SystemManager__ctor[0x110]; //00071a80
     undefined AASTEAM_SystemManager__dtor[0x1e0]; //00071b90
@@ -1790,11 +2412,11 @@ struct BBCF {
     undefined AASTEAM_SystemManager___create_pad_input_controllers[0x1e0]; //000722c0
     undefined AASTEAM_SystemManager___create_CFadeController[0x40]; //000724a0
     undefined AASTEAM_SystemManager__create_CFileController[0x70]; //000724e0
-    undefined AASTEAM_SystemManager__call_DirectInput8Create[0x30]; //00072550
+    undefined AASTEAM_SystemManager___call_DirectInput8Create[0x30]; //00072550
     undefined AASTEAM_SystemManager___create_InputTask[0x30]; //00072580
     undefined AASTEAM_SystemManager___create_CNetworkTask[0x100]; //000725b0
     undefined AASTEAM_SystemManager___create_CParticleTask[0x50]; //000726b0
-    undefined AASTEAM_SystemManager___create_CRenderCtrl_[0x13f0]; //00072700
+    undefined AASTEAM_SystemManager___create_CRenderCtrl[0x13f0]; //00072700
     undefined AASTEAM_SystemManager___create_CSoundCtrl[0x170]; //00073af0
     undefined AASTEAM_SystemManager___init_fonts_[0x290]; //00073c60
     undefined AASTEAM_SystemManager___create_SystemKeyControler[0x160]; //00073ef0
@@ -1806,7 +2428,8 @@ struct BBCF {
     undefined _get_DAT_006651a0_char_names_[0x10f0]; //00075300
     undefined _vsprintf_name_in_DAT_006651a0[0x990]; //000763f0
     undefined _vsprintf_s_40[0x1640]; //00076d80
-    undefined _get_DAT_00667ff0[0x27c0]; //000783c0
+    undefined _get_DAT_00667ff0[0x790]; //000783c0
+    undefined GAME_CEff3DInstHndlManager___dtor[0x2030]; //00078b50
     undefined _get_DAT_006770b8[0x80]; //0007ab80
     undefined _get_GAME_CEff3DInstHndlManager[0x120]; //0007ac00
     undefined AA_CBoneMotionFactory___create[0x70]; //0007ad20
@@ -1825,24 +2448,29 @@ struct BBCF {
     undefined _get_FPACBuffers[0x90]; //0007ca90
     undefined FPACBuffers___init[0xa0]; //0007cb20
     undefined GameVals__ctor[0x350]; //0007cbc0
-    undefined GameVals__dtor[0xa1d]; //0007cf10
+    undefined GameVals__dtor[0xa00]; //0007cf10
+    undefined GameVals___duplicate_many_fields[0x1d]; //0007d910
     undefined inject_GetPaletteIndexPointers[0xc93]; //0007d92d
     undefined _get_GAME_BattleSynthKeyControler_for_player[0x110]; //0007e5c0
-    undefined GameVals___get_player_data_1_by_index[0xe0]; //0007e6d0
-    undefined _get_GAME_SynthKeyControler_by_index_1[0xb0]; //0007e7b0
+    undefined GameVals___get_player_data_small_by_index[0xe0]; //0007e6d0
+    undefined _get_GAME_SynthKeyControler_by_index_1[0x20]; //0007e7b0
+    undefined _get_GAME_SynthKeyControler_for_player[0x90]; //0007e7d0
     undefined get_GameVals[0x150]; //0007e860
     undefined GameVals___get_synth_controller_index_for_active_player[0x10]; //0007e9b0
     undefined GameVals___get_active_player[0x1d0]; //0007e9c0
     undefined GameVals___get_char_index_for_player_[0x20]; //0007eb90
-    undefined GameVals___get_player_data_by_index[0xc0]; //0007ebb0
+    undefined GameVals___get_player_data_big_by_index[0xc0]; //0007ebb0
     undefined GameVals___get_synth_controller_index_for_other_player[0x280]; //0007ec70
-    undefined _ctor_for_player_data_[0x450]; //0007eef0
+    undefined _ctor_for_player_data_big[0x450]; //0007eef0
     undefined GameVals___is_boss_[0x130]; //0007f340
     undefined NetworkStruct___get_0x270[0x160]; //0007f470
-    undefined GameVals___check_player_data_is_1_1[0x210]; //0007f5d0
-    undefined GameVals___is_Arcade_and_check_active_player_data_0xc[0x1dc0]; //0007f7e0
+    undefined GameVals___check_player_data_is_valid[0x210]; //0007f5d0
+    undefined GameVals___is_Arcade_and_check_active_player_data_0xc[0x4d0]; //0007f7e0
+    undefined GameVals___reset[0x2b0]; //0007fcb0
+    undefined GameVals___set_music_[0x1640]; //0007ff60
     undefined GameVals___reset_player_data_1[0x1420]; //000815a0
-    undefined GAME_InputTask__update_task[0x240]; //000829c0
+    undefined GAME_InputTask__update_task[0xf0]; //000829c0
+    undefined MenuMessage___ctor[0x150]; //00082ab0
     undefined entry_2[0x4d0]; //00082c00
     undefined AA_PreloadTask___init_3[0x1b0]; //000830d0
     undefined AA_PreloadTask___init_6[0xf0]; //00083280
@@ -1872,34 +2500,58 @@ struct BBCF {
     undefined GAME_KeyControler___check_button_down_[0xa0]; //00096560
     undefined GAMESTEAM_BattleKeyControler__update_task[0x120]; //00096600
     undefined GAME_SynthKeyControler___check_button_hit_1[0xc0]; //00096720
-    undefined GAME_SynthKeyControler___check_button_down_1_[0x100]; //000967e0
+    undefined GAME_SynthKeyControler___check_button_down_1[0x100]; //000967e0
     undefined GAME_KeyControler___format_input[0xb0]; //000968e0
     undefined GAME_KeyControler___create_CKeyRingBuffer[0x130]; //00096990
     undefined _get_DAT_005de0b0_index_[0x30]; //00096ac0
     undefined GAMESTEAM_BattleKeyControler__update_1[0x3910]; //00096af0
-    undefined _get_DAT_0114d000[0xe34]; //0009a400
+    undefined _get_DAT_0114d000[0xaa0]; //0009a400
+    undefined NetforkStruct___handle_packets_[0x394]; //0009aea0
     undefined inject_PacketProcessingFunc[0x238c]; //0009b234
-    undefined _get_DAT_008ad0c0_0xd0[0x182e]; //0009d5c0
+    undefined _get_NetUserData_0xd0[0x182e]; //0009d5c0
     undefined inject_GetRoomTwo[0x112]; //0009edee
-    undefined inject_GetRoomOne[0x1ce1]; //0009ef00
+    undefined inject_GetRoomOne[0x17d0]; //0009ef00
+    undefined NetUserData___ctor[0x511]; //000a06d0
     undefined inject_GetPlayerAvatarBaseFunc[0x3ff]; //000a0be1
-    undefined _get_DAT_008ad0c0[0x1a10]; //000a0fe0
-    undefined _get_CSTEAMNetworkLobbyData[0x16b0]; //000a29f0
-    undefined _get_DAT_008f7758[0x1310]; //000a40a0
-    undefined GAME_CNetworkServer__dtor_1[0x4b0]; //000a53b0
+    undefined _get_NetUserData[0x1a10]; //000a0fe0
+    undefined _get_CSTEAMNetworkLobbyData_1[0x16b0]; //000a29f0
+    undefined _get_DAT_008f7758_entry_[0x3a0]; //000a40a0
+    undefined _start_ranked_lobby_search__[0xf70]; //000a4440
+    undefined GAME_CNetworkServer__dtor_1[0xa0]; //000a53b0
+    undefined GAMESTEAM_CNetworkServer___get_lobby_node[0x190]; //000a5450
+    undefined GAMESTEAM_CNetworkServer___call_read_lobby_search_results[0xd0]; //000a55e0
+    undefined GAMESTEAM_CNetworkServer___call_join_lobby[0x30]; //000a56b0
+    undefined GAMESTEAM_CNetworkServer___CreateLobby[0xf0]; //000a56e0
+    undefined GAMESTEAM_CNetworkServer___call_lobby_search[0x90]; //000a57d0
     undefined NetworkStruct__ctor[0x430]; //000a5860
     undefined GAME_CNetworkTask__ctor[0x90]; //000a5c90
-    undefined GAME_CNetworkTask__dtor[0x1250]; //000a5d20
+    undefined GAME_CNetworkTask__dtor[0x900]; //000a5d20
+    undefined _ping_to_connection_bars[0x740]; //000a6620
+    undefined NetworkStruct___update_popup[0x210]; //000a6d60
     undefined NetworkStruct___update[0x460]; //000a6f70
     undefined GAME_CNetworkTask__update_task[0x90]; //000a73d0
     undefined _get_StatBattleTmp[0x380]; //000a7460
     undefined _get_NetworkStruct[0x1b0]; //000a77e0
-    undefined get_rematch_byte[0x4a0]; //000a7990
-    undefined NetworkStruct___state_not_in_1_2_3_0xe[0x140]; //000a7e30
-    undefined NetworkStruct___set_0x278_1[0x92d0]; //000a7f70
+    undefined get_rematch_byte[0x1b0]; //000a7990
+    undefined GAMESTEAM_CNetworkServer___get_lobby_node_1[0xf0]; //000a7b40
+    undefined NetworkStruct___reset_state_[0x200]; //000a7c30
+    undefined NetworkStruct___state_not_in_0_2_3_0xe[0x140]; //000a7e30
+    undefined NetworkStruct___get_0x278__1[0x20]; //000a7f70
+    undefined NetworkStruct___check_0xac_or_0xac_c[0x1c0]; //000a7f90
+    undefined NetworkStruct___pop_first_action[0x780]; //000a8150
+    undefined NetworkStruct___push_action[0x100]; //000a88d0
+    undefined NetworkStruct___start_join_lobby[0xaf0]; //000a89d0
+    undefined NetworkStruct___start_player_lobby_search[0x860]; //000a94c0
+    undefined NetworkStruct___clear_action_queue[0x29a0]; //000a9d20
+    undefined NetworkStruct___update_player_menu_[0x810]; //000ac6c0
+    undefined _update_in_room_[0x1800]; //000aced0
+    undefined NetworkStruct___update_ranked_menu_[0x15c0]; //000ae6d0
+    undefined NetworkStruct___log_in_[0x520]; //000afc90
+    undefined NetworkStruct___update_default_[0x7c0]; //000b01b0
+    undefined NetworkStruct___log_in_2_[0x8d0]; //000b0970
     undefined maybe_reverts_room_settings_on_player_enter_leave[0x1220]; //000b1240
     undefined AASTEAM_SystemManager___init_CParticleTask_[0x270]; //000b2460
-    undefined AASTEAM_SystemManager___create_CParticleTask[0x610]; //000b26d0
+    undefined AASTEAM_SystemManager___create_CParticleTask_1[0x610]; //000b26d0
     undefined GAME_CParticleTaskFactory___create[0x3e0]; //000b2ce0
     undefined _return_0[0xc10]; //000b30c0
     undefined _get_DAT_008f7e30[0x52a0]; //000b3cd0
@@ -1913,7 +2565,8 @@ struct BBCF {
     undefined inject_GetMoneyAddr[0x1ac]; //000b9dc4
     undefined GAME_CSaveTask__update_task[0x8e0]; //000b9f70
     undefined CSaveDataManager___get_save_status[0x10]; //000ba850
-    undefined CSaveDataManager___get_ReplayList[0x40]; //000ba860
+    undefined CSaveDataManager___get_ReplayList[0x10]; //000ba860
+    undefined CSaveDataManager___get_replay_by_index[0x30]; //000ba870
     undefined _get_DAT_005df4d0[0x60]; //000ba8a0
     undefined _get_s_SVID_NoSaveData_004aa1d8[0x1c0]; //000ba900
     undefined ReplayFileHeader__init[0x100]; //000baac0
@@ -1932,11 +2585,11 @@ struct BBCF {
     undefined ReplayList__init[0x330]; //000bd770
     undefined ReplayList__sort[0x1c90]; //000bdaa0
     undefined _play_wav[0x5e0]; //000bf730
-    undefined _call_DAT_00623630_0___vftable_3__Music[0x30]; //000bfd10
-    undefined _call_DAT_00623630_0___vftable_3__BgSe[0x30]; //000bfd40
-    undefined _call_DAT_00623630_0___vftable_3__Se[0x30]; //000bfd70
-    undefined _call_DAT_00623630_0___vftable_3__SVoice[0x30]; //000bfda0
-    undefined _call_DAT_00623630_0___vftable_3__Voice[0xca0]; //000bfdd0
+    undefined _call_DAT_00623630_0___gtvftable_3__Music[0x30]; //000bfd10
+    undefined _call_DAT_00623630_0___gtvftable_3__BgSe[0x30]; //000bfd40
+    undefined _call_DAT_00623630_0___gtvftable_3__Se[0x30]; //000bfd70
+    undefined _call_DAT_00623630_0___gtvftable_3__SVoice[0x30]; //000bfda0
+    undefined _call_DAT_00623630_0___gtvftable_3__Voice[0xca0]; //000bfdd0
     undefined _calls_DAT_00623630_item_methods_with_FPAC_items[0x4b0]; //000c0a70
     undefined _get_DAT_00abfff8[0x310]; //000c0f20
     undefined AA_SystemManager__ctor[0x50]; //000c1230
@@ -1944,7 +2597,7 @@ struct BBCF {
     undefined AA_SystemManager__dtor_[0xf0]; //000c1290
     undefined AASTEAM_SystemManager___get_input_controller_by_index[0x10]; //000c1380
     undefined AASTEAM_SystemManager___create_CSaveTask_and_CEventControlTask[0x210]; //000c1390
-    undefined _return_1[0x10]; //000c15a0
+    undefined _return_1_1[0x10]; //000c15a0
     undefined GAME_CEventControlTaskFactory___create[0x6a0]; //000c15b0
     undefined _get_GAME_CTextEffectObject[0x1680]; //000c1c50
     undefined _get_GAMESTEAM_CVoiceChatManager[0x5ce0]; //000c32d0
@@ -1962,7 +2615,8 @@ struct BBCF {
     undefined SaveUtil___start_read[0x40]; //000cafc0
     undefined SaveUtil___start_write[0x40]; //000cb000
     undefined SaveUtil__init[0x70]; //000cb040
-    undefined inject_UploadReplayToEndpoint[0xd0]; //000cb0b0
+    undefined inject_UploadReplayToEndpoint[0x80]; //000cb0b0
+    undefined SaveUtil___format_filename[0x50]; //000cb130
     undefined ReplayList___copy_selected_header[0x20]; //000cb180
     undefined ReplayFileHeader___write_end_time[0x70]; //000cb1a0
     undefined SaveUtil__setup_data_to_write[0x110]; //000cb210
@@ -1977,16 +2631,18 @@ struct BBCF {
     undefined GAMEJVS_CCreditTaskFactory___create[0x130]; //000d1950
     undefined CAdvCtrTaskFactory___create[0xe0]; //000d1a80
     undefined _assert_fail_and_exit_2[0x40]; //000d1b60
-    undefined _assert_fail_log_1[0x570]; //000d1ba0
+    undefined _assert_fail_log_1[0x420]; //000d1ba0
+    undefined _battle_is_paused_1_[0x150]; //000d1fc0
     undefined SCENE_CAbyssUIFactory___create[0x70]; //000d2110
     undefined SCENE_CMatchResultFactory___create[0x80]; //000d2180
-    undefined SCENE_TestRingCommandFactory___create[0x209]; //000d2200
+    undefined SCENE_TestRingCommandFactory___create[0x200]; //000d2200
+    undefined _inc_frame_counter_[9]; //000d2400
     undefined inject_GetFrameCounter[0x197]; //000d2409
     undefined _get_BG_EffectManager[0x1560]; //000d25a0
     undefined AllianceModeEnemyData___load_from_FPAC[0x140]; //000d3b00
     undefined _get_AllianceModeEnemyData[0x9cc0]; //000d3c40
     undefined _ctor_for_DAT_013b02f0_item_1[0x40]; //000dd900
-    undefined _empty_func[0x80]; //000dd940
+    undefined _empty_func_1[0x80]; //000dd940
     undefined _is_Arcade_and_SPA_Posing_[0x90]; //000dd9c0
     undefined _maybe_get_training_menu_default_values_1_[0x740]; //000dda50
     undefined _is_Arcade_and_check_active_player_data_0xc[0x1d80]; //000de190
@@ -2035,7 +2691,7 @@ struct BBCF {
     undefined SCENE_CGallery___update_scene[0x160]; //001067f0
     undefined _get_DAT_00d5b138_by_index[0xa0]; //00106950
     undefined SCENE_CGallery___init_8_2[0xc0]; //001069f0
-    undefined _return_1[0x10]; //00106ab0
+    undefined _return_1_2[0x10]; //00106ab0
     undefined SCENE_CGallery___init_7[0x200]; //00106ac0
     undefined SCENE_CGallery___init_3[0x7a0]; //00106cc0
     undefined SCENE_CBase__inc_GameSceneState[0x120]; //00107460
@@ -2045,9 +2701,9 @@ struct BBCF {
     undefined _get_DAT_00d61670[0x540]; //001145e0
     undefined _get_DAT_00d9a4b0[0xb0]; //00114b20
     undefined _get_DAT_00d9a4d8[0x1e50]; //00114bd0
-    undefined _return_0[0xd0]; //00116a20
-    undefined _return_0[0x4de0]; //00116af0
-    undefined _get_DAT_00d9a540[0x7640]; //0011b8d0
+    undefined _return_0_1[0xd0]; //00116a20
+    undefined _return_0_2[0x4de0]; //00116af0
+    undefined _get_DAT_00d9a540_lobby_[0x7640]; //0011b8d0
     undefined _get_DAT_00da2378[0x2a60]; //00122f10
     undefined _get_CPlayerBattleInformation[0x70]; //00125970
     undefined _get_CPlayerRoomMember[0x5ad]; //001259e0
@@ -2058,10 +2714,11 @@ struct BBCF {
     undefined CNetworkUILobbyRegionSelect__select_[0x60]; //001302f0
     undefined _get_CNetworkLobbyWorld[0x80]; //00130350
     undefined _get_CNetworkUILobbyRegionSelect[0x1c0]; //001303d0
-    undefined CNetworkUILobbyRegionSelect__init_[0xd520]; //00130590
+    undefined CNetworkUIPlayerMatchCreate___clear[0xb4c0]; //00130590
+    undefined CNetworkUIPlayerMatchCreate___dtor[0x2060]; //0013ba50
     undefined get_CNetworkUIPlayerMatchCreate[0xa0]; //0013dab0
     undefined _get_CNetworkUIPlayerMatchSearch[0xb0]; //0013db50
-    undefined CNetworkUIPlayerMatchCreate__init_[0x28d0]; //0013dc00
+    undefined CNetworkUIPlayerMatchCreate___init[0x28d0]; //0013dc00
     undefined _get_CNetworkUIPlayerMatchTopMenu[0x590]; //001404d0
     undefined CNetworkUIRankMatchTopMenu__dtor[0xe80]; //00140a60
     undefined _get_CNetworkUIRankMatchTopMenu[0x90]; //001418e0
@@ -2150,13 +2807,15 @@ struct BBCF {
     undefined BATTLE_CObjectManager__process_events[0x260]; //0015bc90
     undefined BATTLE_CObjectManager___find_entity_with_some_status_[0x650]; //0015bef0
     undefined get_BATTLE_CObjectManager[0x290]; //0015c540
-    undefined BATTLE_CObjectManager___get_entity_for_player[0x210]; //0015c7d0
+    undefined BATTLE_CObjectManager___get_entity_for_player[0xc0]; //0015c7d0
+    undefined OBJ_CCharBase___compare_1[0x150]; //0015c890
     undefined BATTLE_CObjectManager__dtor_[0x243]; //0015c9e0
     undefined inject_GetEntityListDeleteAddr[0xd6d]; //0015cc23
     undefined OBJ_CBase___set_status_to_2_or_3[0x30]; //0015d990
     undefined BATTLE_CObjectManager___request_event[0x370]; //0015d9c0
     undefined BATTLE_CObjectManager___build_src_hash_table[0xbb0]; //0015dd30
-    undefined MatchInfo__ctor[0x700]; //0015e8e0
+    undefined MatchInfo__ctor[0xb0]; //0015e8e0
+    undefined MatchInfo___mark_winner[0x650]; //0015e990
     undefined MatchInfo___update_NotStarted[0x230]; //0015efe0
     undefined GAME_CETCManager___get_CETCObject_by_index[0x3b0]; //0015f210
     undefined MatchInfo___init[0xbf]; //0015f5c0
@@ -2167,7 +2826,7 @@ struct BBCF {
     undefined MatchInfo___update_WinLoseSign[0x4f0]; //00163370
     undefined MatchInfo___update_FinishSign[0xb80]; //00163860
     undefined MatchInfo___update_RebelActionRoundSign[0x1f0]; //001643e0
-    undefined MatchInfo___update_FinishSign[0x3d0]; //001645d0
+    undefined MatchInfo___update_state_6[0x3d0]; //001645d0
     undefined MatchInfo___update_state_1[0x730]; //001649a0
     undefined BATTLE_CScreenManager__ctor[0xed0]; //001650d0
     undefined get_BATTLE_CScreenManager[0x1a90]; //00165fa0
@@ -2188,20 +2847,22 @@ struct BBCF {
     undefined OBJ_CBase__ctor[0x840]; //00172ef0
     undefined OBJ_CBase__dtor[0x330]; //00173730
     undefined OBJ_CCharBase__maybe_move_range_check[0x310]; //00173a60
-    undefined OBJ_CCharBase__get_closest_throw_range_distance[0x8bb7]; //00173d70
+    undefined OBJ_CCharBase__get_closest_throw_range_distance[0x960]; //00173d70
+    undefined OBJ_CBase___update_5[0x8257]; //001746d0
     undefined inject_ForceBloomOn[0x1f9]; //0017c927
     undefined OBJ_CCharBase__get_current_input[0x60]; //0017cb20
     undefined OBJ_CCharBase___check_hp_[0x67]; //0017cb80
     undefined inject_vampire_HealthDrain[0x15b9]; //0017cbe7
     undefined OBJ_CCharBase__get_position_x_for_check[0x50]; //0017e1a0
-    undefined OBJ_CCharBase__get_position_x_for_check[0x10]; //0017e1f0
+    undefined OBJ_CCharBase__get_position_x_for_check_1[0x10]; //0017e1f0
     undefined OBJ_CCharBase__get_position_y_for_check[0x180]; //0017e200
     undefined OBJ_CCharBase__get_BoundingX_or_BoundingFixX[0x3e0]; //0017e380
-    undefined OBJ_CCharBase___check_hp_1[0x490]; //0017e760
+    undefined OBJ_CCharBase___check_hp_is_0[0x490]; //0017e760
     undefined OBJ_CBase__init_[0x820]; //0017ebf0
     undefined _assert_BB_Assert_and_exit[0x60]; //0017f410
     undefined OBJ_CBase__dtor_[0x26e0]; //0017f470
-    undefined OBJ_CBase__maybe_BBscript_frame_loop[0x6a0]; //00181b50
+    undefined OBJ_CBase__maybe_BBscript_frame_loop[0x4b0]; //00181b50
+    undefined OBJ_CCharBase___enterState[0x1f0]; //00182000
     undefined _build_hash_table_from_bbscript_src_[0x570]; //001821f0
     undefined OBJ_CBase___bbscript_line_loop[0x450]; //00182760
     undefined OBJ_CBase__BBScriptFuncExecute[0x85d0]; //00182bb0
@@ -3172,16 +3833,22 @@ struct BBCF {
     undefined OBJ_CBase___bbcmd_2053_WallCollisionDetection[0x20]; //0019f1e0
     undefined OBJ_CBase___bbcmd_53_DestroyOnStageEdge[0x30]; //0019f200
     undefined OBJ_CBase___bbcmd_23143_TravelFromPointToPoint[0x17142]; //0019f230
-    undefined inject_GetPalBaseAddresses[0xac3a]; //001b6372
+    undefined inject_GetPalBaseAddresses[0xa1e]; //001b6372
+    undefined OBJ_CCharBase___check_to_enter_CmnActAirTurn[0x390]; //001b6d90
+    undefined OBJ_CCharBase___check_to_enter_CmnActCrouchTurn[0x50]; //001b7120
+    undefined OBJ_CCharBase___check_to_entrer_CmnActStand2Crouch[0x1cb0]; //001b7170
+    undefined OBJ_CCharBase___check_to_enter_CmnActStandTurn[0x818c]; //001b8e20
     undefined inject_steroid_OverdriveCharge[0x94]; //001c0fac
     undefined OBJ_CCharBase__add_heat[0x168]; //001c1040
     undefined inject_steroid_HeatModify[0x1228]; //001c11a8
     undefined GAME_CBB4VersionInfo1_00_00___return_10000[0x2800]; //001c23d0
     undefined OBJ_CCharBase__ctor[0x780]; //001c4bd0
-    undefined OBJ_CCharBase__dtor[0x5010]; //001c5350
+    undefined OBJ_CCharBase__dtor[0x4e90]; //001c5350
+    undefined OBJ_CCharBase___check_input_buffer_[0x180]; //001ca1e0
     undefined OBJ_CCharBase___bbcmd_18001_ClearCommonActionControl[0x3a0]; //001ca360
     undefined OBJ_CCharBase__update_input_buffer_fields[0x20f]; //001ca700
-    undefined OBJ_CCharBase___update_input_buffer_fields_1[0x25e5]; //001ca90f
+    undefined OBJ_CCharBase___update_input_buffer_fields_1[0x1b81]; //001ca90f
+    undefined OBJ_CCharBase___update_from_settings_6_[0xa64]; //001cc490
     undefined inject_training_healthModifyFix[0x109]; //001ccef4
     undefined inject_getTrainingHealthModifyFixJmpBackAddr[0x1223]; //001ccffd
     undefined OBJ_CCharBase___bbcmd_13032_Enable2GetUp[0x20]; //001ce220
@@ -3220,7 +3887,8 @@ struct BBCF {
     undefined OBJ_CCharBase___bbcmd_13016_WhiffStandingTurnCancel[0x30]; //001ce790
     undefined OBJ_CCharBase___bbcmd_13000_WhiffStandCancel[0x4b0]; //001ce7c0
     undefined OBJ_CCharBase___reset[0x530]; //001cec70
-    undefined OBJ_CCharBase__dtor_[0x2610]; //001cf1a0
+    undefined OBJ_CCharBase__dtor_[0x2050]; //001cf1a0
+    undefined OBJ_CCharBase___update_inputs_[0x5c0]; //001d11f0
     undefined OBJ_CCharBase___bbcmd_14069_HitOrBlockCancel[0x60]; //001d17b0
     undefined OBJ_CCharBase___bbcmd_14068_WhiffCancel[0x60]; //001d1810
     undefined OBJ_CCharBase___bbcmd_14080_HitCancel[0xc00]; //001d1870
@@ -3297,9 +3965,19 @@ struct BBCF {
     undefined inject_GetGameStateTitleScreen[0x2462]; //001f9aee
     undefined AA_CFiler___return_0[0x10]; //001fbf50
     undefined BB_CFontFactory_Group___create[0x4dc0]; //001fbf60
-    undefined BB_CFontFactory_CharSelect___create[0x96a0]; //00200d20
-    undefined _get_DAT_00e3eb40[0x131a]; //0020a3c0
-    undefined inject_GetStageSelectAddr[0x6836]; //0020b6da
+    undefined BB_CFontFactory_CharSelect___create[0x7ff0]; //00200d20
+    undefined CharSelect__ctor[0xdd0]; //00208d10
+    undefined CharSelect___check_button_down[0x170]; //00209ae0
+    undefined CharSelect___reset[0x770]; //00209c50
+    undefined _get_DAT_00e3eb40[0x30]; //0020a3c0
+    undefined CharSelect___init[0x12e0]; //0020a3f0
+    undefined _ctor_for_stage_select_[0xa]; //0020b6d0
+    undefined inject_GetStageSelectAddr[0xb6]; //0020b6da
+    undefined CharSelect___set_stage_cursor[0xe0]; //0020b790
+    undefined CharSelect___update_music_select[0x460]; //0020b870
+    undefined CharSelect___update_char_select[0x1560]; //0020bcd0
+    undefined CharSelect___update_stage_select[0x1730]; //0020d230
+    undefined CharSelect___update[0x35b0]; //0020e960
     undefined SCENE_CCharSelect___init_8_1[0x1aa]; //00211f10
     undefined inject_OverwriteStagesList[0x476]; //002120ba
     undefined SCENE_CCharSelect___set_next_scene[0x780]; //00212530
@@ -3358,7 +4036,7 @@ struct BBCF {
     undefined GAME_CETCObjParam___init[0x23950]; //00244400
     undefined GAME_CBB4VersionInfo1_01_00___get_switchdataD_00402774[0x80]; //00267d50
     undefined _get_GAME_CBB4VersionInfo[0x3b0]; //00267dd0
-    undefined _return_0[0x10]; //00268180
+    undefined _return_0_3[0x10]; //00268180
     undefined GAMESTEAM_CDLCManager__maybe_log_game_state[0x2d30]; //00268190
     undefined BB_CFontFactory_Profile___create[0xc10]; //0026aec0
     undefined SCENE_CProfile___init_8_1[0x1240]; //0026bad0
@@ -3384,19 +4062,23 @@ struct BBCF {
     undefined _play_menu_cancel_wav[0x150]; //00292210
     undefined _play_menu_cursor_a_wav[0x70]; //00292360
     undefined _play_menu_error_wav[0x70]; //002923d0
-    undefined _play_menu_ok_wav[0x32b0]; //00292440
+    undefined _play_menu_ok_wav[0x2a0]; //00292440
+    undefined _handle_msg_input[0x3010]; //002926e0
     undefined _get_DAT_01100374_events_[0x10]; //002956f0
-    undefined _get_DAT_01100374_events_[0x130]; //00295700
-    undefined _get_DAT_011003c0_or_DAT_01100678[0x1d0]; //00295830
-    undefined _get_DAT_01100bd8[0xc0]; //00295a00
-    undefined _get_DAT_00623674[0x10]; //00295ac0
+    undefined _get_DAT_01100374_events_1[0x130]; //00295700
+    undefined _get_MenuMessage_n[0x1d0]; //00295830
+    undefined _get_DAT_01100bd8_errors_[0xc0]; //00295a00
+    undefined _get_DAT_00623674_palettes_1[0x10]; //00295ac0
     undefined _get_DAT_01015a28_item[0x20]; //00295ad0
     undefined _get__s_MsgWindow_006043e4_index[0x15e0]; //00295af0
-    undefined _ctor_for_DAT_013b02f0_item[0xac0]; //002970d0
+    undefined _ctor_for_DAT_013b02f0_item[0x960]; //002970d0
+    undefined MenuMessage___show_[0x160]; //00297a30
     undefined _DAT_01015a28_PushUIExclusiveName_[0x770]; //00297b90
-    undefined _ctor_00298300_MSGW_OK[0xe0]; //00298300
+    undefined _ctor_00298300_MSGW_OK[0x40]; //00298300
+    undefined MenuMessage___init_yes_no_[0xa0]; //00298340
     undefined _show_error_[0x1410]; //002983e0
-    undefined _DAT_01015a28_PushUIExclusiveName_1_[0x2380]; //002997f0
+    undefined _DAT_01015a28_PushUIExclusiveName_1_[0x1190]; //002997f0
+    undefined _get_DAT_00604950[0x11f0]; //0029a980
     undefined CBattleReplayDataManager__ctor[0x120]; //0029bb70
     undefined ReplayFile__pack_replay[0x1d0]; //0029bc90
     undefined CBattleReplayDataManager___pack_replay[0x830]; //0029be60
@@ -3407,17 +4089,19 @@ struct BBCF {
     undefined get_CBattleReplayDataManager[0x60]; //0029d2e0
     undefined CBattleReplayDataManager___get_replay_buffer[0x30]; //0029d340
     undefined CBattleReplayDataManager___get_playback_speed[0x620]; //0029d370
-    undefined NetworkStruct___get_0x270_1[0xb0]; //0029d990
-    undefined _mode_is_Versus_and_bsave_0x30_5[0x40]; //0029da40
-    undefined CBattleReplayDataManager__get_playback_input_for_player[0x1370]; //0029da80
+    undefined NetworkStruct___get_0x270_1[0x60]; //0029d990
+    undefined ReplayFileHeader___replay_version_lt7[0x50]; //0029d9f0
+    undefined _mode_is_Versus_and_bsave_0x30_lt5[0x40]; //0029da40
+    undefined CBattleReplayDataManager__get_playback_input_for_player[0x3f0]; //0029da80
+    undefined CBattleReplayDataManager___init_GameVals_player_data[0xf80]; //0029de70
     undefined _get_DAT_011c47c0[0x10]; //0029edf0
     undefined _get_DAT_011cea10[0x10]; //0029ee00
     undefined _get_DAT_011cec00[0x5860]; //0029ee10
     undefined _get_CCommandListManager[0x34b0]; //002a4670
     undefined _get_DAT_0121bf80[0xb0]; //002a7b20
     undefined _get_DAT_0121bfa8[0x21d0]; //002a7bd0
-    undefined _return_0[0x10]; //002a9da0
-    undefined _empty_func[0x210]; //002a9db0
+    undefined _return_0_4[0x10]; //002a9da0
+    undefined _empty_func_2[0x210]; //002a9db0
     undefined SCENE_CLibraryMode___dtor[0xa0]; //002a9fc0
     undefined SCENE_CLibraryMode___init_8_1[0x1cf0]; //002aa060
     undefined SCENE_CLibraryMode___set_next_scene[0x80]; //002abd50
@@ -3437,50 +4121,52 @@ struct BBCF {
     undefined SCENE_CReplayTheater__dtor[0x30]; //002c1f10
     undefined SCENE_CReplayTheater___init_8_1[0xa20]; //002c1f40
     undefined SCENE_CReplayTheater__set_next_scene[0x150]; //002c2960
-    undefined _replay_list_update_menu[0x48]; //002c2ab0
+    undefined SCENE_CReplayTheater___update_menu[0x48]; //002c2ab0
     undefined inject_BeforeWriteReplayListDat[0x477]; //002c2af8
     undefined inject_DelNetworkReqWatchReplays[0x3b1]; //002c2f6f
-    undefined SCENE_CReplayTheater__update_scene[0x130]; //002c3320
+    undefined SCENE_CReplayTheater__update_scene[0x70]; //002c3320
+    undefined _ctor_for_replay_list_menu[0xc0]; //002c3390
     undefined SCENE_CReplayTheater___init_7[0xd0]; //002c3450
     undefined SCENE_CReplayTheater__init[0x30]; //002c3520
     undefined inject_GetGameStateReplayMenuScreen[0x540]; //002c3550
-    undefined DAT_01304bf8__ctor[0x1f0]; //002c3a90
-    undefined DAT_01304bf8___set_action_0x3a[0xc0]; //002c3c80
-    undefined _get_DAT_01304bf8_0x3c[0x60]; //002c3d40
-    undefined DAT_01304bf8___has_action[0x70]; //002c3da0
-    undefined DAT_01304bf8___check_flags[0x90]; //002c3e10
-    undefined DAT_01304bf8___set_save_flag_2_replay[0x80]; //002c3ea0
-    undefined DAT_01304bf8___set_save_flag_4_replay_list[0x90]; //002c3f20
-    undefined DAT_01304bf8___set_action_0x1d[0xc0]; //002c3fb0
-    undefined DAT_01304bf8___set_action_0x2d[0xc0]; //002c4070
-    undefined DAT_01304bf8___set_action_0x21[0xc0]; //002c4130
-    undefined DAT_01304bf8___set_action_0x28[0xd0]; //002c41f0
-    undefined DAT_01304bf8___set_action_1_1_[0x70]; //002c42c0
-    undefined DAT_01304bf8___set_save_flag_1_bbsave[0xa0]; //002c4330
-    undefined DAT_01304bf8___set_action_1[0xe0]; //002c43d0
-    undefined DAT_01304bf8___set_action_1_2_[0x70]; //002c44b0
-    undefined DAT_01304bf8___return_1_[0x80]; //002c4520
-    undefined DAT_01304bf8___set_action_0x44[0xd0]; //002c45a0
-    undefined DAT_01304bf8___set_action_0x3b[0x210]; //002c4670
-    undefined DAT_01304bf8___update_1[0xa0]; //002c4880
-    undefined DAT_01304bf8___set_action[0x70]; //002c4920
-    undefined DAT_01304bf8___update[0x24c0]; //002c4990
-    undefined DAT_01304bf8___update_save_util[0x43a0]; //002c6e50
+    undefined AutoSaveStruct__ctor[0x1f0]; //002c3a90
+    undefined AutoSaveStruct___set_action_0x3a[0xc0]; //002c3c80
+    undefined AutoSaveStruct___is_done[0x60]; //002c3d40
+    undefined AutoSaveStruct___has_action[0x70]; //002c3da0
+    undefined AutoSaveStruct___check_flags[0x90]; //002c3e10
+    undefined AutoSaveStruct___set_save_flag_2_replay[0x80]; //002c3ea0
+    undefined AutoSaveStruct___set_save_flag_4_replay_list[0x90]; //002c3f20
+    undefined AutoSaveStruct___set_action_0x1d[0xc0]; //002c3fb0
+    undefined AutoSaveStruct___set_action_0x2d[0xc0]; //002c4070
+    undefined AutoSaveStruct___set_action_0x21_read_replay[0xc0]; //002c4130
+    undefined AutoSaveStruct___set_action_0x28[0xd0]; //002c41f0
+    undefined AutoSaveStruct___set_action_1_1_[0x70]; //002c42c0
+    undefined AutoSaveStruct___set_save_flag_1_bbsave[0xa0]; //002c4330
+    undefined AutoSaveStruct___set_action_1[0xe0]; //002c43d0
+    undefined AutoSaveStruct___set_action_1_2_[0x70]; //002c44b0
+    undefined AutoSaveStruct___return_1_[0x80]; //002c4520
+    undefined AutoSaveStruct___set_action_0x44[0xd0]; //002c45a0
+    undefined AutoSaveStruct___set_action_0x3b[0x210]; //002c4670
+    undefined AutoSaveStruct___update_1[0xa0]; //002c4880
+    undefined AutoSaveStruct___set_action[0x70]; //002c4920
+    undefined AutoSaveStruct___update[0x24c0]; //002c4990
+    undefined AutoSaveStruct___update_save_util[0x43a0]; //002c6e50
     undefined _get_training_playback_input[0x2a0]; //002cb1f0
     undefined _get_training_input_TRI_Posing_[0xb00]; //002cb490
     undefined _get_menu_item_values_by_name_or_default_[0x160]; //002cbf90
     undefined get_menu_item_values[0x310]; //002cc0f0
-    undefined _input_is_for_other_player_[0xa0]; //002cc400
+    undefined _input_is_for_other_player_[0x50]; //002cc400
+    undefined _battle_is_paused_[0x50]; //002cc450
     undefined GameVals___mode_is_ReplayTheater[0x80]; //002cc4a0
     undefined GameVals___mode_is_Training[0xb30]; //002cc520
     undefined _update_replay_theater_menu_items_[0x570]; //002cd050
     undefined _set_menu_item_values_by_name[0x140]; //002cd5c0
     undefined set_menu_item_values[0x80]; //002cd700
     undefined _update_training_menu_items_[0x2d10]; //002cd780
-    undefined _get_DAT_01392d10[0x3080]; //002d0490
+    undefined _get_DAT_01392d10_pause_[0x3080]; //002d0490
     undefined _get_menu_item_configs_by_name_013ae3a8[0x1c0]; //002d3510
     undefined _maybe_get_training_menu_default_values_[0xa30]; //002d36d0
-    undefined NetworkStruct___set_0x278_1_[0x1a90]; //002d4100
+    undefined NetworkStruct___get_0x278__1_[0x1a90]; //002d4100
     undefined _get_DAT_013b02f0[0x1520]; //002d5b90
     undefined _get_menu_item_configs_by_name_013cb7f8[0x4810]; //002d70b0
     undefined _GameMode__Challenge[0x190]; //002db8c0
@@ -3532,11 +4218,15 @@ struct BBCF {
     undefined SubMenu__ctor[0x33f0]; //00308cc0
     undefined _replay_list_view_go_down[0x60]; //0030c0b0
     undefined _set_DAT_0141e738_1[0x10]; //0030c110
-    undefined MainMenu__update[0x16c0]; //0030c120
+    undefined MainMenu__update[0x1650]; //0030c120
+    undefined _replay_list_view_reset_1[0x70]; //0030d770
     undefined _replay_list_view_reset[0x2920]; //0030d7e0
-    undefined _replay_list_view_go_up[0x9fd0]; //00310100
-    undefined MainMenu__update_1[0x4d0]; //0031a0d0
-    undefined MainMenu__run_selected_menu_item[0x5890]; //0031a5a0
+    undefined _replay_list_view_go_up[0x2480]; //00310100
+    undefined MainMenu___update_controller_select[0x5810]; //00312580
+    undefined MainMenu___update_lobby_list[0x2340]; //00317d90
+    undefined MainMenu___update_sub_menu[0x4d0]; //0031a0d0
+    undefined MainMenu__run_selected_menu_item[0x6f0]; //0031a5a0
+    undefined MainMenu___update_main_menu[0x51a0]; //0031ac90
     undefined BB_CFontFactory_MainMenu___create[0x9100]; //0031fe30
     undefined SCENE_CMainMenuEX__ctor[0x100]; //00328f30
     undefined SCENE_CMainMenuEX__dtor[0x6b0]; //00329030
@@ -3568,12 +4258,14 @@ struct BBCF {
     undefined get_GAME_CEventManager[0x160]; //0034cae0
     undefined GAME_CEventControlTask__dtor[0x60]; //0034cc40
     undefined GAME_CEventControlTask__update_task[0x47c0]; //0034cca0
-    undefined _empty_func[0x1f40]; //00351460
+    undefined _empty_func_3[0x1f40]; //00351460
     undefined CAdvCtrTask___dtor[0xa50]; //003533a0
     undefined CAdvCtrTask___update_task[0x4930]; //00353df0
     undefined _get_DAT_0142a510[0x1250]; //00358720
     undefined _FUN_00359980_1[0x820]; //00359970
-    undefined _get_DAT_0142a560_adv_ctrl_[0x1f200]; //0035a190
+    undefined _get_DAT_0142a560_adv_ctrl_[0x1eb70]; //0035a190
+    undefined _CryptHashData_[0x100]; //00378d00
+    undefined _CryptDecrypt_[0x590]; //00378e00
     undefined _get_DAT_0142a764[0x6c0]; //00379390
     undefined AudioDeviceControlManager___return_0[0x2cd0]; //00379a50
     undefined SteamPeer2PeerBackend__GoesToSetDisconnectNotifyStart[0x80]; //0037c720
@@ -3591,7 +4283,7 @@ struct BBCF {
     undefined InputQueue__AdvanceQueueHead[0x600]; //0037f120
     undefined SteamUdp__maybe_init[0x2b0]; //0037f720
     undefined SteamUdpProtocol__maybe_init[0x360]; //0037f9d0
-    undefined SteamUdpProtocol__maybe_init[0xa50]; //0037fd30
+    undefined SteamUdpProtocol__maybe_init_1[0xa50]; //0037fd30
     undefined UdpMsg__PacketSize[0xac0]; //00380780
     undefined SteamUdpProtocol__maybe_Synchronize[0x650]; //00381240
     undefined _assert_fail_msg_ggpo[0xe0]; //00381890
@@ -3626,65 +4318,67 @@ struct BBCF {
     undefined maybe_copies_state[0x4f0]; //00386cd0
     undefined _assert_fail_and_exit[0x2a9]; //003871c0
     undefined _operator_new_1[0x16c6c]; //00387469
-    undefined _free_1[0x78f]; //0039e0d5
-    undefined _free_1[0x45c]; //0039e864
+    undefined _free_1_1[0x78f]; //0039e0d5
+    undefined _free_1_2[0x45c]; //0039e864
     undefined _memcpy_1[0xa00]; //0039ecc0
     undefined _float_round_[0x180]; //0039f6c0
     undefined _memset_[0x1fc]; //0039f840
     undefined _atol_1[0x15f9]; //0039fa3c
-    undefined _free_1[0x1ea5]; //003a1035
+    undefined _free_1_3[0x1ea5]; //003a1035
     undefined maybe_rand__[0x28b]; //003a2eda
     undefined _HeapCompact[0x1389]; //003a3165
     undefined _get_PTR_DAT_0060e180[0x12a1]; //003a44ee
     undefined _empty_func_[0xa97]; //003a578f
     undefined _DeleteCriticalSection_1[0x224]; //003a6226
     undefined _EnterCriticalSection_1[0x150]; //003a644a
-    undefined _LeaveCriticalSection_1[0xb302]; //003a659a
+    undefined _LeaveCriticalSection_1_1[0xb302]; //003a659a
     undefined _get_DAT_0060ea04[6]; //003b189c
     undefined _get_DAT_0060ea08[6]; //003b18a2
     undefined _get_DAT_0060ea00[6]; //003b18a8
     undefined _get_PTR_DAT_0060ea90[0xa966]; //003b18ae
     undefined _TlsGetValue_01ccb818[0x13aa]; //003bc214
-    undefined _TlsGetValue_01ccb818[0x110d]; //003bd5be
-    undefined _empty_func[0x17b51]; //003be6cb
-    undefined _DebugMallocator_class_std___Ref_count_del_alloc_class___ExceptionPtr_void____cdecl___class___ExceptionPtr___class__DebugMallocator_int________allocate[0x3e884]; //003d621c
+    undefined _TlsGetValue_01ccb818_1[0x110d]; //003bd5be
+    undefined _empty_func_4[0x17b51]; //003be6cb
+    undefined _DebugMallocator_ltclass_std___Ref_count_del_alloc_ltclass___ExceptionPtr_void____cdecl___class___ExceptionPtr___class__DebugMallocator_ltint_gt__gt__gt___allocate[0x3e884]; //003d621c
     undefined AAWin_CFileReader_Thread___uncompress_pac_[0x7760]; //00414aa0
     undefined _get_DAT_00611e94[0x419e]; //0041c200
     undefined _get_PTR_s_No_error_005a4de8[6]; //0042039e
     undefined _get_DAT_00611ea0[0x2321c]; //004203a4
     undefined static___init_battle_pause_menu_items[0x3330]; //004435c0
     undefined static___init_DAT_013b02f0[0x13e0]; //004468f0
-    undefined _empty_func[0x1a0]; //00447cd0
+    undefined _empty_func_5[0x1a0]; //00447cd0
     undefined AA_CRandomManager__dtor[0x210]; //00447e70
-    undefined _empty_func[0x30]; //00448080
+    undefined _empty_func_6[0x30]; //00448080
     undefined AASTEAM_CNetworker__dtor_1[0x230]; //004480b0
-    undefined _empty_func[0x190]; //004482e0
-    undefined _empty_func[0x10]; //00448470
-    undefined _empty_func[0x1a0]; //00448480
-    undefined _empty_func[0x30]; //00448620
-    undefined _empty_func[0x60]; //00448650
-    undefined _empty_func[0x40]; //004486b0
-    undefined _empty_func[0x1b0]; //004486f0
-    undefined _empty_func[0x20]; //004488a0
-    undefined _empty_func[0xf0]; //004488c0
-    undefined _empty_func[0x50]; //004489b0
-    undefined _empty_func[0xe0]; //00448a00
-    undefined _empty_func[0x10]; //00448ae0
-    undefined game_Stat_PCoinManager___init[0x10]; //00448af0
-    undefined _empty_func[0x10]; //00448b00
-    undefined _empty_func[0x1a0]; //00448b10
-    undefined _empty_func[0x10]; //00448cb0
-    undefined _empty_func[0x320]; //00448cc0
-    undefined _empty_func[0x40]; //00448fe0
-    undefined _empty_func[0x1e0]; //00449020
-    undefined _empty_func[0xe0]; //00449200
-    undefined _empty_func[0x1380]; //004492e0
-    undefined4 static_initializer_table; //0044a660
+    undefined _empty_func_7[0x190]; //004482e0
+    undefined _empty_func_8[0x10]; //00448470
+    undefined _empty_func_9[0x1a0]; //00448480
+    undefined _empty_func_10[0x30]; //00448620
+    undefined _empty_func_11[0x60]; //00448650
+    undefined _empty_func_12[0x40]; //004486b0
+    undefined _empty_func_13[0x1b0]; //004486f0
+    undefined _empty_func_14[0x20]; //004488a0
+    undefined _empty_func_15[0xf0]; //004488c0
+    undefined _empty_func_16[0x50]; //004489b0
+    undefined _empty_func_17[0xe0]; //00448a00
+    undefined _empty_func_18[0x10]; //00448ae0
+    undefined game_Stat_PCoinManager___init_1[0x10]; //00448af0
+    undefined _empty_func_19[0x10]; //00448b00
+    undefined _empty_func_20[0x1a0]; //00448b10
+    undefined _empty_func_21[0x10]; //00448cb0
+    undefined _empty_func_22[0x320]; //00448cc0
+    undefined _empty_func_23[0x40]; //00448fe0
+    undefined _empty_func_24[0x1e0]; //00449020
+    undefined _empty_func_25[0xe0]; //00449200
+    undefined _empty_func_26[0x1380]; //004492e0
+    undefined4 _static_initializer_table; //0044a660
     undefined __44a664[0x45e0];
     pointer s_empty_; //0044ec44
     undefined __44ec48[0x103140];
     int _static_bbscript_cmd_lengths[0x41a][2]; //00551d88
-    undefined __553e58[0x8ce00];
+    undefined __553e58[0x7f3c0];
+    struct SteamInterfaces static_SteamInterfaces; //005d3218
+    undefined __5d326c[0xd9ec];
     struct SaveUtil static_SaveUtil; //005e0c58
     undefined __5e0da8[0x31afc];
     undefined _static_AA_CCameraManager[0x10]; //006128a4
@@ -3697,14 +4391,16 @@ struct BBCF {
     undefined __612970[0x90];
     undefined _static_AA_CParticleManager[0x60]; //00612a00
     undefined __612a60[0xb60];
-    undefined static_AA_CRandomManager[0x10184]; //006135c0
+    undefined _static_AA_CRandomManager[0x10184]; //006135c0
     undefined4 _static_AA_CFriendList_ptr; //00623744
     undefined __623748[0x1e6c];
     undefined _static_DInput8Struct[0xc]; //006255b4
     undefined __6255c0[0x1c8];
     struct AASTEAM_CNetworker static_AASTEAM_CNetworker; //00625788
-    undefined __6291d8[0x10];
-    undefined ranked_search_results[0xc18]; //006291e8
+    undefined __6291d8[8];
+    undefined _lobby_search_results[0x40][0x30]; //006291e0
+    int _lobby_search_results_last; //00629de0
+    undefined __629de4[0x1c];
     undefined4 _static_AASTEAM_CRankingReader; //00629e00
     undefined __629e04[0x1c];
     undefined4 _static_AASTEAM_CReplayUploader_ptr; //00629e20
@@ -3713,7 +4409,7 @@ struct BBCF {
     undefined __629e40[8];
     undefined _static_AASTEAM_CVoiceSound[0x18]; //00629e48
     undefined __629e60[0x306a0];
-    undefined _static_AADX_CRenderer[0x1248]; //0065a500
+    struct AADX_CRenderer _static_AADX_CRenderer; //0065a500
     undefined __65b748[0x48];
     undefined _static_AADX_CRenderInserter[4]; //0065b790
     undefined __65b794[4];
@@ -3735,11 +4431,11 @@ struct BBCF {
     undefined __65d220[0x50];
     undefined _static_CSTEAMNetworkLobbyData[0x5270]; //0065d270
     undefined __6624e0[0x250];
-    undefined _static_GAMESTEAM_QoSListner[0x25f0]; //00662730
+    struct GAMESTEAM_CNetworkServer static_GAMESTEAM_CNetworkServer; //00662730
     undefined __664d20[0x98];
-    undefined _static_GAMESTEAM_VirtualKeyboard[0x224]; //00664db8
+    struct GAMESTEAM_VirtualKeyboard _static_GAMESTEAM_VirtualKeyboard; //00664db8
     undefined __664fdc[0x4c];
-    undefined static_GAME_CEventFaceDataManager[0xbc]; //00665028
+    undefined _static_GAME_CEventFaceDataManager[0xbc]; //00665028
     undefined __6650e4[0x11fb4];
     undefined _static_GAME_CEff3DInstHndlManager[0x217430]; //00677098
     struct Buffer static_FPACBuffers[0x3d4]; //0088e4c8
@@ -3759,9 +4455,11 @@ struct BBCF {
     undefined __897e40[0x150e8];
     undefined4 _static_GAMESTEAM_CDLCManager_ptr; //008acf28
     undefined __8acf2c[8];
-    undefined static_GAME_CFadeTaskManager[0x3c]; //008acf34
+    undefined _static_GAME_CFadeTaskManager[0x3c]; //008acf34
     undefined _static_CInstallManager_NULL[4]; //008acf70
-    undefined __8acf74[0x4a87c];
+    undefined __8acf74[0x14c];
+    struct NetUserData static_NetUserData; //008ad0c0
+    undefined __8f7708[0xe8];
     undefined _static_StatBattleTmp[0x168]; //008f77f0
     struct NetworkStruct static_NetworkStruct; //008f7958
     undefined __8f7d98[0x840];
@@ -3792,7 +4490,7 @@ struct BBCF {
     undefined __da6384[0x34];
     undefined _static_CNetworkUILobbyRegionSelect[0x1764]; //00da63b8
     undefined __da7b1c[0x124];
-    undefined static_CNetworkUIPlayerMatchCreate[0x17e4]; //00da7c40
+    struct CNetworkUIPlayerMatchCreate static_CNetworkUIPlayerMatchCreate; //00da7c40
     undefined __da9424[4];
     undefined _static_CNetworkUIPlayerMatchSearch[0x17e4]; //00da9428
     undefined __daac0c[0x4c];
@@ -3826,154 +4524,198 @@ struct BBCF {
     undefined _static_Lobby_CBase[8]; //00e3ef4c
     undefined _static_MyRoomTest_CBase[8]; //00e3ef54
     undefined _static_DCC_CBase[8]; //00e3ef5c
-    undefined _static_ETCObjectStatic_CBase[0x4d0e0]; //00e3ef64
+    undefined _static_ETCObjectStatic_CBase[0xc]; //00e3ef64
+    struct CharSelect static_CharSelect; //00e3ef70
+    undefined static_TitleLoop[0x4a664]; //00e419e0
     struct MainMenu static_MainMenu; //00e8c044
-    undefined __e942f0[0x5dbe0];
+    undefined __e942f0[0x5b6c];
+    undefined _static_net_etc_[0x68]; //00e99e5c
+    undefined __e99ec4[0x5800c];
     struct GAME_CETCManager static_GAME_CETCManager; //00ef1ed0
     undefined __ef4898[0xd8];
     undefined4 _static_GAME_VersionInfoManager; //00ef4970
     undefined __ef4974[8];
     undefined _static_GAME_CBB4VersionInfo0_00_00[4]; //00ef497c
-    undefined __ef4980[0x266af0];
+    undefined __ef4980[0x20ba40];
+    struct MenuMessage _static_MenuMessage_0; //011003c0
+    undefined __1100660[0x18];
+    struct MenuMessage _static_MenuMessage_1; //01100678
+    undefined __1100918[0x10];
+    struct MenuMessage _static_MenuMessage_2; //01100928
+    undefined __1100bc8[0x5a8a8];
     struct CBattleReplayDataManager static_CBattleReplayDataManager; //0115b470
     undefined __11c06f8[0xe5d0];
     undefined _static_CCommandListManager[0x4614]; //011cecc8
     undefined __11d32dc[0x1316d8];
     undefined4 _array_of_CMenuItemManager_length; //013049b4
     undefined4 _array_of_CMenuItemManager; //013049b8
-    undefined __13049bc[0xa99ec];
+    undefined __13049bc[0x1d4];
+    int _replay_list_menu_state[8]; //01304b90
+    undefined __1304bb0[0x48];
+    struct AutoSaveStruct _static_AutoSaveStruct; //01304bf8
+    undefined __1304c50[0xa9758];
     struct SettingsMenuItem _menu_item_configs_013ae3a8[0x84]; //013ae3a8
     int _menu_item_order_013b0088[0x86]; //013b0088
     undefined __13b02a0[0x1b018];
     struct SettingsMenuItem _menu_item_configs_013cb2b8[0x18]; //013cb2b8
     int _menu_item_order_013cb7f8[0x18]; //013cb7f8
     undefined __13cb858[0x53248];
-    undefined static_GAME_CEventManager[0xb90c]; //0141eaa0
+    undefined _static_GAME_CEventManager[0xb90c]; //0141eaa0
 };
+static_assert(sizeof(BBCF) == 21144492);
 
 /*PlaceHolder Class Structure*/
 struct BG_CChinatown {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CChinatown) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_GagePoint15AF {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_GagePoint15AF) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CPalette_HIP {
     undefined __0000[0x3c];
 };
+static_assert(sizeof(AA_CPalette_HIP) == 60);
 
 /*PlaceHolder Class Structure*/
 struct BG_CTown {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CTown) == 760);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CMatchResult {
     struct SCENE_CBase base;
-    undefined __0001[0x8f];
+    undefined __0060[0x30];
 };
+static_assert(sizeof(SCENE_CMatchResult) == 144);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskAstralFinish {
     undefined __0000[0x18];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskAstralFinish) == 24);
+
+/*PlaceHolder Class Structure*/
+struct AA_CNetworkReceiver {
+    undefined** vftable;
+    undefined __0004[0x18];
+};
+static_assert(sizeof(AA_CNetworkReceiver) == 28);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CAsyncTaskThread {
     undefined __0000[0x3c];
 };
+static_assert(sizeof(AASTEAM_CAsyncTaskThread) == 60);
 
 /*PlaceHolder Class Structure*/
 struct BG_CMonolis {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CMonolis) == 760);
 
 /* /ClassDataTypes/CCallbackImpl<16> */
-struct CCallbackImpl_16_{ undefined __0000[0x14]; };
+struct CCallbackImpl_lt16_gt_placeholder { undefined __0000[0x14]; };
 
 /*real size is 0x2248*/
 struct OBJ_CBase {
     struct OBJ_CCharBase ch;
 };
+static_assert(sizeof(OBJ_CBase) == 149880);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_CharSel_CntDown {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_CharSel_CntDown) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BG_CHalloween_2 {
     undefined __0000[0x33c];
 };
+static_assert(sizeof(BG_CHalloween_2) == 828);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CAbyssUI {
     struct SCENE_CBase base;
-    undefined __0001[0x73];
+    undefined __0060[0x14];
 };
+static_assert(sizeof(SCENE_CAbyssUI) == 116);
 
 /*PlaceHolder Class Structure*/
 struct BG_CMain_Night {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CMain_Night) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_StageInfo_Num {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_StageInfo_Num) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BG_CBascule {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CBascule) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_StageInfo_Name {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_StageInfo_Name) == 48);
 
 /*PlaceHolder Class Structure*/
 struct CAdvCtrTask {
     struct AA_TaskNode base;
-    undefined __0001[0x21977];
+    undefined __0018[0x21960];
 };
+static_assert(sizeof(CAdvCtrTask) == 137592);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_PreTeamBattle {
     struct SCENE_CBase base;
-    undefined __0001[0x1fff];
+    undefined __0060[0x1fa0];
 };
+static_assert(sizeof(SCENE_PreTeamBattle) == 8192);
 
 /*PlaceHolder Class Structure*/
 struct AA_CPalette_Custom {
     undefined __0000[0x1028];
 };
+static_assert(sizeof(AA_CPalette_Custom) == 4136);
 
 /*PlaceHolder Class Structure*/
 struct GAME_CEventControlTask {
     struct AA_TaskNode base;
-    undefined __0001[0x17];
 };
+static_assert(sizeof(GAME_CEventControlTask) == 24);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskSpiral {
     undefined __0000[0x3c];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskSpiral) == 60);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CReplayTheater {
     struct SCENE_CBase base;
-    undefined __0001[0x87];
+    undefined __0060[0x28];
 };
+static_assert(sizeof(SCENE_CReplayTheater) == 136);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_CharSel_BgmSel {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_CharSel_BgmSel) == 48);
 
 /*PlaceHolder Class Structure*/
 struct GAMESTEAM_CVoiceChatManager {
@@ -3982,614 +4724,789 @@ struct GAMESTEAM_CVoiceChatManager {
     undefined __0002;
     undefined __0003;
 };
+static_assert(sizeof(GAMESTEAM_CVoiceChatManager) == 4);
 
 /*PlaceHolder Class Structure*/
 struct BG_CGate_Open {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CGate_Open) == 760);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CTestMyRoom {
     struct SCENE_CBase base;
-    undefined __0001[0x10b];
+    undefined __0060[0xac];
 };
+static_assert(sizeof(SCENE_CTestMyRoom) == 268);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CDcc {
     struct SCENE_CBase base;
-    undefined __0001[0x10b];
+    undefined __0060[0xac];
 };
+static_assert(sizeof(SCENE_CDcc) == 268);
 
 /*PlaceHolder Class Structure*/
 struct BG_CUltimate {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CUltimate) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BG_CCircus {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CCircus) == 760);
 
 /*PlaceHolder Class Structure*/
 struct CEnumMediaTypes {
     undefined __0000[0x14];
 };
+static_assert(sizeof(CEnumMediaTypes) == 20);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_ModeSel_CntDown {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_ModeSel_CntDown) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BG_CMain_Rain {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CMain_Rain) == 760);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CReplayUploadTask {
     struct AA_TaskNode base;
-    undefined __0001[0x2757];
+    undefined __0018[0x2740];
 };
+static_assert(sizeof(AASTEAM_CReplayUploadTask) == 10072);
 
 /*PlaceHolder Class Structure*/
 struct BG_CVillage {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CVillage) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_Profile_PersonalData {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_Profile_PersonalData) == 48);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CLibraryMode {
     struct SCENE_CBase base;
-    undefined __0001[0x6f];
+    undefined __0060[0x10];
 };
+static_assert(sizeof(SCENE_CLibraryMode) == 112);
 
 /*PlaceHolder Class Structure*/
 struct BG_CBase {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CBase) == 760);
+
+/*PlaceHolder Class Structure*/
+struct CSceneController {
+    struct AA_TaskNode base;
+    int state;
+    undefined4 __001c;
+    undefined4 __0020;
+};
+static_assert(sizeof(CSceneController) == 36);
+
+struct GAMESTEAM_SearchResultNode {
+    struct AA_ListNode base;
+    undefined4 valid;
+    wchar_t room_name[0x10];
+    undefined __0030[0x2a];
+    short rank_host_level;
+    char rank_myarea[2];
+    short rank_area_filter;
+    undefined __0060[4];
+    int player_session_flag;
+    int player_session_value;
+    byte player_member_max;
+    byte num_members;
+    byte player_private_max;
+    byte player_private_num;
+    undefined __0070[4];
+    byte host_netcolor;
+    undefined __0075[3];
+    int ping;
+    undefined __007c[0x8e];
+    short rank_rtt_filter;
+    undefined __010c[8];
+    struct AASTEAM_SearchResult* source;
+};
+static_assert(sizeof(GAMESTEAM_SearchResultNode) == 280);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CCharSelect {
     struct SCENE_CBase base;
-    undefined __0001[0x2d3];
+    undefined __0060[0x274];
 };
+static_assert(sizeof(SCENE_CCharSelect) == 724);
 
 /*PlaceHolder Class Structure*/
 struct AA_CFont_Tool {
     undefined __0000[0x8c];
 };
+static_assert(sizeof(AA_CFont_Tool) == 140);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CStaffRoll {
     struct SCENE_CBase base;
-    undefined __0001[0x87];
+    undefined __0060[0x28];
 };
+static_assert(sizeof(SCENE_CStaffRoll) == 136);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CStorySelect {
     struct SCENE_CBase base;
-    undefined __0001[0x87];
+    undefined __0060[0x28];
 };
+static_assert(sizeof(SCENE_CStorySelect) == 136);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CExtra {
     struct SCENE_CBase base;
-    undefined __0001[0x87];
+    undefined __0060[0x28];
 };
+static_assert(sizeof(SCENE_CExtra) == 136);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_SparringTime {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_SparringTime) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BG_CMain_Daylight {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CMain_Daylight) == 760);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CWinner {
     struct SCENE_CBase base;
-    undefined __0001[0xbb];
+    undefined __0060[0x5c];
 };
+static_assert(sizeof(SCENE_CWinner) == 188);
+
+/*PlaceHolder Class Structure*/
+struct AA_CRenderController {
+    undefined** vftable;
+    undefined __0004[0x14];
+    struct AADX_CRenderer* renderer;
+};
+static_assert(sizeof(AA_CRenderController) == 28);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_Score {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_Score) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CParticleGroupEdit {
     undefined __0000[0x88];
 };
+static_assert(sizeof(AA_CParticleGroupEdit) == 136);
 
 /*PlaceHolder Class Structure*/
 struct BG_CBridge {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CBridge) == 760);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CInputXInputPad {
     undefined __0000[0x3c];
 };
+static_assert(sizeof(AASTEAM_CInputXInputPad) == 60);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CStageInfo {
     struct SCENE_CBase base;
-    undefined __0001[0xab];
+    undefined __0060[0x4c];
 };
+static_assert(sizeof(SCENE_CStageInfo) == 172);
 
 /*PlaceHolder Class Structure*/
 struct AA_CTextureList {
     undefined __0000[0x48];
 };
+static_assert(sizeof(AA_CTextureList) == 72);
 
 /*PlaceHolder Class Structure*/
 struct BG_CGarden {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CGarden) == 760);
 
 /*PlaceHolder Class Structure*/
 struct AAJVS_CInputPad {
     undefined __0000[0x58];
 };
+static_assert(sizeof(AAJVS_CInputPad) == 88);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CGallery {
     struct SCENE_CBase base;
-    undefined __0001[0xab];
+    undefined __0060[0x4c];
 };
+static_assert(sizeof(SCENE_CGallery) == 172);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskBGCrossFade {
     undefined __0000[0x20];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskBGCrossFade) == 32);
 
 /*PlaceHolder Class Structure*/
 struct AA_CBoneMotion {
     undefined __0000[0xc];
 };
+static_assert(sizeof(AA_CBoneMotion) == 12);
 
 /*PlaceHolder Class Structure*/
 struct GAMEJVS_CCreditTask {
     struct AA_TaskNode base;
-    undefined __0001[0x67];
+    undefined __0018[0x50];
 };
+static_assert(sizeof(GAMEJVS_CCreditTask) == 104);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_GagePoint15 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_GagePoint15) == 48);
 
 /*PlaceHolder Class Structure*/
 struct GAMESTEAM_CDLCManager {
     undefined __0000[0x90];
 };
+static_assert(sizeof(GAMESTEAM_CDLCManager) == 144);
 
 /*PlaceHolder Class Structure*/
 struct GAMESTEAM_COnlineStorageTransfer {
     undefined __0000[0x1c];
 };
+static_assert(sizeof(GAMESTEAM_COnlineStorageTransfer) == 28);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_GagePoint {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_GagePoint) == 48);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CTutorialUI {
     struct SCENE_CBase base;
-    undefined __0001[0x6f];
+    undefined __0060[0x10];
 };
+static_assert(sizeof(SCENE_CTutorialUI) == 112);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CUMSTask {
     struct AA_TaskNode base;
-    undefined __0001[0x10f];
+    undefined __0018[0xf8];
 };
+static_assert(sizeof(AASTEAM_CUMSTask) == 272);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_TestRingCommand {
     struct SCENE_CBase base;
-    undefined __0001[0x67];
+    undefined __0060[8];
 };
+static_assert(sizeof(SCENE_TestRingCommand) == 104);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskBGChange {
     undefined __0000[0x3fc54];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskBGChange) == 261204);
 
 /*PlaceHolder Class Structure*/
 struct AA_CMaterialMotion {
     undefined __0000[0xc];
 };
+static_assert(sizeof(AA_CMaterialMotion) == 12);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskBreak {
     undefined __0000[0x3fc38];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskBreak) == 261176);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CInputPad {
     undefined __0000[0x294];
 };
+static_assert(sizeof(AASTEAM_CInputPad) == 660);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_OverDriveCountDwon {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_OverDriveCountDwon) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BG_CGate_1 {
     undefined __0000[0x33c];
 };
+static_assert(sizeof(BG_CGate_1) == 828);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CVoiceChatManager {
     undefined __0000[0x5648];
 };
+static_assert(sizeof(AASTEAM_CVoiceChatManager) == 22088);
 
 /*PlaceHolder Class Structure*/
 struct BG_CGate_2 {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CGate_2) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BG_CGate_3 {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CGate_3) == 760);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CRankingThreadManager {
     undefined __0000[0xc];
 };
+static_assert(sizeof(AASTEAM_CRankingThreadManager) == 12);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CLegion {
     struct SCENE_CBase base;
-    undefined __0001[0x1a3];
+    undefined __0060[0x144];
 };
+static_assert(sizeof(SCENE_CLegion) == 420);
 
 /*PlaceHolder Class Structure*/
 struct AA_Timer {
     undefined __0000[0x20];
 };
+static_assert(sizeof(AA_Timer) == 32);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_RankingFont0 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_RankingFont0) == 48);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskGizaGiza {
     undefined __0000[0x1c];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskGizaGiza) == 28);
 
 /*PlaceHolder Class Structure*/
 struct GAME_CFadeTask {
     struct AA_TaskNode base;
-    undefined __0001[0x1b];
+    undefined __0018;
+    undefined __0019;
+    undefined __001a;
+    undefined __001b;
 };
+static_assert(sizeof(GAME_CFadeTask) == 28);
 
 /*PlaceHolder Class Structure*/
 struct BG_CPipe {
     undefined __0000[0x338];
 };
+static_assert(sizeof(BG_CPipe) == 824);
 
 /*PlaceHolder Class Structure*/
 struct AA_CCollision_JON {
     undefined __0000[0xc8];
 };
+static_assert(sizeof(AA_CCollision_JON) == 200);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CResult {
     struct SCENE_CBase base;
-    undefined __0001[0x77];
+    undefined __0060[0x18];
 };
-
-/*PlaceHolder Class Structure*/
-struct CSceneController {
-    undefined __0000[0x24];
-};
+static_assert(sizeof(SCENE_CResult) == 120);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_BEAT {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_BEAT) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BG_EffectMikadoTokitome {
     undefined __0000[0x5c];
 };
+static_assert(sizeof(BG_EffectMikadoTokitome) == 92);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CModeSelect {
     struct SCENE_CBase base;
-    undefined __0001[0xc3];
+    undefined __0060[0x64];
 };
+static_assert(sizeof(SCENE_CModeSelect) == 196);
 
 /*PlaceHolder Class Structure*/
 struct CEnumPins {
     undefined __0000[0x30];
 };
+static_assert(sizeof(CEnumPins) == 48);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskBG {
     undefined __0000[0x1c];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskBG) == 28);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CMainMenuEX {
     struct SCENE_CBase base;
-    undefined __0001[0x999f];
+    undefined __0060[0x9940];
 };
+static_assert(sizeof(SCENE_CMainMenuEX) == 39328);
 
 /*PlaceHolder Class Structure*/
 struct GAME_CParticleTask {
     struct AA_TaskNode base;
-    undefined __0001[0x17];
 };
+static_assert(sizeof(GAME_CParticleTask) == 24);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CLobby {
     struct SCENE_CBase base;
-    undefined __0001[0x14f];
+    undefined __0060[0xf0];
 };
+static_assert(sizeof(SCENE_CLobby) == 336);
 
 /*PlaceHolder Class Structure*/
 struct BG_CBridge_Night {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CBridge_Night) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_Combo {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_Combo) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_RankingFont2 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_RankingFont2) == 48);
 
 /*PlaceHolder Class Structure*/
 struct GAMEDX_CFadeTaskUltimateFinish {
     undefined __0000[0x18];
 };
+static_assert(sizeof(GAMEDX_CFadeTaskUltimateFinish) == 24);
 
 /*PlaceHolder Class Structure*/
 struct BG_CHalloween {
     undefined __0000[0x33c];
 };
+static_assert(sizeof(BG_CHalloween) == 828);
 
 /*PlaceHolder Class Structure*/
 struct BG_CChurch {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CChurch) == 760);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CTitleLoop {
     struct SCENE_CBase base;
-    undefined __0001[0x97];
+    undefined __0060[0x38];
 };
+static_assert(sizeof(SCENE_CTitleLoop) == 152);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_Time {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_Time) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BB_CEvent {
     undefined __0000[0x40];
 };
+static_assert(sizeof(BB_CEvent) == 64);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CRankingWriter {
     undefined __0000[0x274d0];
 };
+static_assert(sizeof(AASTEAM_CRankingWriter) == 160976);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CRanking {
     struct SCENE_CBase base;
-    undefined __0001[0x7f];
+    undefined __0060[0x20];
 };
+static_assert(sizeof(SCENE_CRanking) == 128);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_RankingFont4 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_RankingFont4) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CModelInstance {
     undefined __0000[0x24];
 };
+static_assert(sizeof(AA_CModelInstance) == 36);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CWarning {
     struct SCENE_CBase base;
-    undefined __0001[0x6f];
+    undefined __0060[0x10];
 };
+static_assert(sizeof(SCENE_CWarning) == 112);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_MainMenu_Cmn {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_MainMenu_Cmn) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CUserManagedStorage {
     undefined __0000[0x10];
 };
+static_assert(sizeof(AA_CUserManagedStorage) == 16);
 
 /*PlaceHolder Class Structure*/
 struct AA_CTexture_HIP {
     undefined __0000[0x60];
 };
+static_assert(sizeof(AA_CTexture_HIP) == 96);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CInputKeyBoard {
     undefined __0000[0x128];
 };
+static_assert(sizeof(AASTEAM_CInputKeyBoard) == 296);
 
 struct GAMESTEAM_BattleKeyControler {
     struct GAME_KeyControler base;
 };
+static_assert(sizeof(GAMESTEAM_BattleKeyControler) == 88);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_StorySelect_ChapterSelectData {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_StorySelect_ChapterSelectData) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CReplayDownloader {
     undefined __0000[8];
 };
+static_assert(sizeof(AA_CReplayDownloader) == 8);
 
 /*PlaceHolder Class Structure*/
 struct AADX_CDynamicTextureList {
     undefined __0000[0x5c];
 };
+static_assert(sizeof(AADX_CDynamicTextureList) == 92);
 
 /*PlaceHolder Class Structure*/
 struct AA_CRenderStreamNode {
     undefined __0000[0x330];
 };
+static_assert(sizeof(AA_CRenderStreamNode) == 816);
 
 /*PlaceHolder Class Structure*/
 struct BG_CChinatown_Night {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CChinatown_Night) == 760);
 
 /*PlaceHolder Class Structure*/
 struct AA_CCamera {
     undefined __0000[0x11c];
 };
+static_assert(sizeof(AA_CCamera) == 284);
 
 /*PlaceHolder Class Structure*/
 struct AA_CMotionFile_MMOT {
     undefined __0000[0x50];
 };
+static_assert(sizeof(AA_CMotionFile_MMOT) == 80);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_TitleLoop_Group {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_TitleLoop_Group) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_RankingFont7 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_RankingFont7) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CReplayDownloadTask {
     struct AA_TaskNode base;
-    undefined __0001[0x273f];
+    undefined __0018[0x2728];
 };
+static_assert(sizeof(AASTEAM_CReplayDownloadTask) == 10048);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CEnding {
     struct SCENE_CBase base;
-    undefined __0001[0xa3];
+    undefined __0060[0x44];
 };
+static_assert(sizeof(SCENE_CEnding) == 164);
 
 /*PlaceHolder Class Structure*/
 struct GAMESTEAM_CRanking {
     undefined __0000[8];
 };
+static_assert(sizeof(GAMESTEAM_CRanking) == 8);
 
 /*PlaceHolder Class Structure*/
 struct BG_CAstralFinish {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CAstralFinish) == 760);
 
 /*PlaceHolder Class Structure*/
 struct AA_PreloadTask {
     struct AA_TaskNode base;
-    undefined __0001[0x17];
     int state;
     undefined __001c[0x48];
 };
+static_assert(sizeof(AA_PreloadTask) == 100);
 
 /*PlaceHolder Class Structure*/
 struct AASTEAM_CRankingReader {
     undefined __0000[0x2780];
 };
+static_assert(sizeof(AASTEAM_CRankingReader) == 10112);
 
 /*PlaceHolder Class Structure*/
 struct AA_CTexture_CmpHIP {
     undefined __0000[0x40];
 };
+static_assert(sizeof(AA_CTexture_CmpHIP) == 64);
 
 /*PlaceHolder Class Structure*/
 struct BG_CUltimateFinish {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CUltimateFinish) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BG_CAstral {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CAstral) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_RankingFont3 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_RankingFont3) == 48);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_RankingFont1 {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_RankingFont1) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CParticleEdit {
     undefined __0000[0x270];
 };
+static_assert(sizeof(AA_CParticleEdit) == 624);
 
 /*PlaceHolder Class Structure*/
 struct AADX_CMovieTexture {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(AADX_CMovieTexture) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_StorySelect_Load {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_StorySelect_Load) == 48);
+
+/*PlaceHolder Class Structure*/
+struct GAMESTEAM_CClassGenerator {
+    undefined** vftable;
+    undefined** AADX_CDynamicTextureListFactory;
+    undefined** AADX_CStaticTextureListFactory;
+    undefined** AADX_CJointDynamicTextureListFactory;
+    undefined** AADX_CMovieTextureFactory;
+    undefined** AA_CTextureFactory_HIP;
+    undefined** AA_CPaletteFactory_HIP;
+    undefined** AA_CTextureFactory_DDS;
+    undefined** AA_CTextureFactory_CmpHIP;
+    undefined** BB_CEventFactory;
+    undefined** BB_CEventInstanceFactory;
+    undefined** AA_CCollisionFactory_JON;
+    undefined** AA_CModelFactory_MUA;
+};
+static_assert(sizeof(GAMESTEAM_CClassGenerator) == 52);
 
 /*PlaceHolder Class Structure*/
 struct AA_CTexture_DDS {
     undefined __0000[0xa4];
 };
+static_assert(sizeof(AA_CTexture_DDS) == 164);
 
 /*PlaceHolder Class Structure*/
 struct SCENE_CProfile {
     struct SCENE_CBase base;
-    undefined __0001[0x93];
+    undefined __0060[0x34];
 };
+static_assert(sizeof(SCENE_CProfile) == 148);
 
 /*PlaceHolder Class Structure*/
 struct AA_CModel_MUA {
     undefined __0000[0x84];
 };
+static_assert(sizeof(AA_CModel_MUA) == 132);
 
 /*PlaceHolder Class Structure*/
 struct BG_CPipe_2 {
     undefined __0000[0x2f8];
 };
+static_assert(sizeof(BG_CPipe_2) == 760);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_OverDrive {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_OverDrive) == 48);
 
 /*PlaceHolder Class Structure*/
 struct AA_CReplayUploader {
     undefined __0000[8];
 };
+static_assert(sizeof(AA_CReplayUploader) == 8);
 
 /*PlaceHolder Class Structure*/
 struct BB_CFont_SystemFont {
     undefined __0000[0x30];
 };
+static_assert(sizeof(BB_CFont_SystemFont) == 48);
 
+
+#pragma pack ( pop )
